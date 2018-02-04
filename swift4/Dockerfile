@@ -10,19 +10,26 @@ RUN apt-get -y update \
  && apt-get -y install --fix-missing python2.7 python-gevent python-flask zip
 
 # Add the action proxy
-# Add the action proxy
-RUN mkdir -p /actionProxy
-ADD actionproxy.py /actionProxy
-
 # FIXME: once this issue is fixed https://github.com/apache/incubator-openwhisk-runtime-swift/issues/15
 #RUN mkdir -p /actionProxy
 #ADD https://raw.githubusercontent.com/apache/incubator-openwhisk-runtime-docker/dockerskeleton%401.0.0/core/actionProxy/actionproxy.py /actionProxy/actionproxy.py
+RUN mkdir -p /actionProxy
+ADD actionproxy.py /actionProxy
+
 
 # Add files needed to build and run action
 RUN mkdir -p /swift4Action/spm-build/Sources/Action
-ADD https://raw.githubusercontent.com/apache/incubator-openwhisk-runtime-swift/master/core/swift4Action/epilogue.swift /swift4Action/epilogue.swift
+
+# FIXME: once the fix for large parameter is fix in upstream we can replace
+#ADD https://raw.githubusercontent.com/apache/incubator-openwhisk-runtime-swift/master/core/swift4Action/epilogue.swift /swift4Action/epilogue.swift
+ADD epilogue.swift /swift4Action/epilogue.swift
+
 ADD https://raw.githubusercontent.com/apache/incubator-openwhisk-runtime-swift/master/core/swift4Action/buildandrecord.py /swift4Action/buildandrecord.py
-ADD https://raw.githubusercontent.com/apache/incubator-openwhisk-runtime-swift/master/core/swift4Action/swift4runner.py /swift4Action/swift4runner.py
+
+# FIXME: once the fix for large parameter is fix in upstream we can replace
+#ADD https://raw.githubusercontent.com/apache/incubator-openwhisk-runtime-swift/master/core/swift4Action/swift4runner.py /swift4Action/swift4runner.py
+ADD swift4runner.py /swift4Action/swift4runner.py
+
 ADD https://raw.githubusercontent.com/apache/incubator-openwhisk-runtime-swift/master/core/swift4Action/spm-build/_Whisk.swift /swift4Action/spm-build/Sources/Action/_Whisk.swift
 
 # Add Pre-Installed Pacakges

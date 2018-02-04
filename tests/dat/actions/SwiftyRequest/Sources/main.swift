@@ -31,6 +31,11 @@ func main(args: [String:Any]) -> [String:Any] {
     _ = semaphore.wait(timeout: .distantFuture)
     return resp
 }
+//let input = readLine() ?? "{}"
+//let json = input.data(using: .utf8, allowLossyConversion: true)!
+//let parsed = try! JSONSerialization.jsonObject(with: json, options: []) as! [String: Any]
+//print(parsed)
+//let r = main(args:["message":"serverless"])
 //let r = main(args:["message":"serverless"])
 //print(r)
 
