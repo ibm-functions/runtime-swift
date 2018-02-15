@@ -30,7 +30,7 @@ To avoid the cold-start delay, you can compile your Swift file into a binary and
 
 - Run an interactive Swift action container.
   ```
-  docker run --rm -it -v "$(pwd):/owexec" openwhisk/action-swift-v4.0 bash
+  docker run --rm -it -v "$(pwd):/owexec" ibmfunctions/action-swift-v4.0 bash
   ```
   This puts you in a bash shell within the Docker container.
 
@@ -107,7 +107,7 @@ let package = Package(
 
 - Upload it to OpenWhisk with the action name helloSwifty:
   ```
-  wsk action update helloSwiftly hello.zip openwhisk/action-swift-v4.0
+  wsk action update helloSwiftly hello.zip ibmfunctions/action-swift-v4.0
   ```
 
 - To check how much faster it is, run
@@ -159,35 +159,28 @@ docker login
 
 ### Swift 4.1 Experimental
 We have a runtime for swift 4.1, is experimental as we are trying beta builds released by Swift org.
-Follow same insructions for Swift 4.0 above and replace the kind wih `swift:4.1` and image with `openwhisk/action-swift-v4.0`
+Follow same insructions for Swift 4.0 above and replace the kind wih `swift:4.1` and image with `ibmfunctions/action-swift-v4.1`
 
-
-### Using Swift 3.1.1
-To use as a docker action
-```
-wsk action update myAction myAction.swift --docker openwhisk/action-swift-v3.1.1:1.0.0
-```
-This works on any deployment of Apache OpenWhisk
 
 ### To use on deployment that contains the rutime as a kind
 To use as a kind action
 ```
-wsk action update myAction myAction.swift --kind swift:3.1.1
+wsk action update myAction myAction.swift --kind swift:4.0
 ```
 
 ### Local development
 ```
 ./gradlew core:swiftAction:distDocker
 ```
-This will produce the image `whisk/action-swift-v3.1.1`
+This will produce the image `whisk/action-swift-v4.0`
 
 Build and Push image
 ```
 docker login
-./gradlew core:swiftAction:distDocker -PdockerImagePrefix=$prefix-user -PdockerRegistry=docker.io 
+./gradlew swift4.0:distDocker -PdockerImagePrefix=$prefix-user -PdockerRegistry=docker.io 
 ```
 
-Deploy OpenWhisk using ansible environment that contains the kind `swift:3.1.1`
+Deploy OpenWhisk using ansible environment that contains the kind `swift:4.0`
 Assuming you have OpenWhisk already deploy localy and `OPENWHISK_HOME` pointing to root directory of OpenWhisk core repository.
 
 Set `ROOTDIR` to the root directory of this repository.
@@ -211,12 +204,12 @@ wskdev fresh -t local-swift
 
 To use as docker action push to your own dockerhub account
 ```
-docker tag whisk/action-swift-v3.1.1 $user_prefix/action-swift-v3.1.1
-docker push $user_prefix/action-swift-v3.1.1
+docker tag whisk/action-swift-v4.0 $user_prefix/action-swift-v4.0
+docker push $user_prefix/action-swift-v4.0
 ```
 Then create the action using your the image from dockerhub
 ```
-wsk action update myAction myAction.swift --docker $user_prefix/action-swift-v3.1.1
+wsk action update myAction myAction.swift --docker $user_prefix/action-swift-v4.0
 ```
 The `$user_prefix` is usually your dockerhub user id.
 
