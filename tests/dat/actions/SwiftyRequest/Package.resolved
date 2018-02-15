@@ -6,8 +6,8 @@
         "repositoryURL": "https://github.com/IBM-Swift/CircuitBreaker.git",
         "state": {
           "branch": null,
-          "revision": "81581e3fb094ab4879aa2c5ce54201f1dbce0a7f",
-          "version": "5.0.1"
+          "revision": "252f7bccb70dc34283f7a05ece624075967d1bb2",
+          "version": "3.0.0"
         }
       },
       {
@@ -24,8 +24,8 @@
         "repositoryURL": "https://github.com/IBM-Swift/SwiftyRequest.git",
         "state": {
           "branch": null,
-          "revision": "3fb065123864051f6c93fea88bdee67858215715",
-          "version": "1.1.1"
+          "revision": "bb6f8b3615bf4b6c0ab0f78df6da093f7583d98b",
+          "version": "1.0.1"
         }
       }
     ]

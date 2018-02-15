@@ -10,15 +10,14 @@ WHISKDIR="$ROOTDIR/../openwhisk"
 export OPENWHISK_HOME=$WHISKDIR
 
 IMAGE_PREFIX=$1
-RUNTIME_VERSION=${2:-"swift4"}
-IMAGE_TAG=${3:-"latest"}
+RUNTIME_VERSION=$2
+IMAGE_TAG=$3
 
-# default to swift4
-RUNTIME="swift4"
-if [ ${RUNTIME_VERSION} == "4.1" ]; then
-  RUNTIME="swift41"
-elif [ ${RUNTIME_VERSION} == "5" ]; then
-  RUNTIME="swift5"
+
+if [ ${RUNTIME_VERSION} == "4.0" ]; then
+  RUNTIME="swift4.0"
+elif [ ${RUNTIME_VERSION} == "4.1" ]; then
+  RUNTIME="swift4.1"
 fi
 
 if [[ ! -z ${DOCKER_USER} ]] && [[ ! -z ${DOCKER_PASSWORD} ]]; then
