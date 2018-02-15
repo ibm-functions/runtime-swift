@@ -2,8 +2,13 @@
 
 [![Build Status](https://travis-ci.org/ibm-functions/runtime-swift.svg?branch=master)](https://travis-ci.org/ibm-functions/runtime-swift)
 
+# WARNING: Under Construction
 
+## Changelogs
+- [Swift 4.0   CHANGELOG.md](swift4.0/CHANGELOG.md)
+- [Swift 4.1   CHANGELOG.md](swift4.1/CHANGELOG.md)
 
+## Quick Swift Action
 ### Simple swift action hello.swift
 The traditional support for dictionary still works:
 ```swift
@@ -16,6 +21,7 @@ func main(args: [String:Any]) -> [String:Any] {
 }
 ```
 
+## Swift 4.x support
 ### Packaging an action as a Swift executable using Swift 4
 
 When you create an OpenWhisk Swift action with a Swift source file, it has to be compiled into a binary before the action is run. Once done, subsequent calls to the action are much faster until the container holding your action is purged. This delay is known as the cold-start delay.
@@ -24,7 +30,7 @@ To avoid the cold-start delay, you can compile your Swift file into a binary and
 
 - Run an interactive Swift action container.
   ```
-  docker run --rm -it -v "$(pwd):/owexec" ibmfunctions/action-swift-v4 bash
+  docker run --rm -it -v "$(pwd):/owexec" openwhisk/action-swift-v4.0 bash
   ```
   This puts you in a bash shell within the Docker container.
 
@@ -69,8 +75,8 @@ let package = Package(
 ```
   As you can see this example adds `SwiftyRequest` dependencies.
   
-  Notice that now with the new `swift:4` runtime is no longer required to include the packages `CCurl`, `Kitura-net` or `SwiftyJSON` in your own `Package.swift`.
-  You are free now to use no dependencies at all, or add the combination that you want with the versions you want.
+  Notice that now with swift:4.0 is no longer required to include `CCurl`, `Kitura-net` and `SwiftyJSON` in your own `Package.swift`.
+  You are free now to use no dependencies, or add the combination that you want with the versions you want.
 
 - Copy Package.swift to spm-build directory
   ```
@@ -101,7 +107,7 @@ let package = Package(
 
 - Upload it to OpenWhisk with the action name helloSwifty:
   ```
-  wsk action update helloSwiftly hello.zip ibmfunctions/action-swift-v4
+  wsk action update helloSwiftly hello.zip openwhisk/action-swift-v4.0
   ```
 
 - To check how much faster it is, run
@@ -109,10 +115,10 @@ let package = Package(
   wsk action invoke helloSwiftly --blocking
   ```
 
-## Migrating from Swift 3 to Swift 4
+### Migrating from Swift 3 to Swift 4
 
 ### Helper compile.sh helper script
-When compiling and packaging your swift 4 now there are a couple of differences
+When compiling and packaging your swift 4 action, there are a couple of differences.
 All your source code needs to be copy to `/swift4Action/spm-build/Sources/Action/` instead of `/swift3Action/spm-build/`
 You Package.swift needs to have the first line with a comment indicating swift4 tooling and format
 ```
@@ -126,38 +132,62 @@ Having a project directory `Hello` under a directory `actions` like the followin
 actions/Hello/Package.swift
 actions/Hello/Sources/main.swift
 ```
-Change to the parent directory then run the compile script specify the project directory, the kind `swift:3.1.1` or `swift:4` and any swiftc build flags like the following:
+Change to the parent directory then run the compile script specify the project directory, the kind `swift:3.1.1` or `swift:4.0` and any swiftc build flags like the following:
 ```
 cd actions/
-incubator-runtime-swift/tools/build/compile.sh Hello swift:4 -v
+incubator-runtime-swift/tools/build/compile.sh Hello swift:4.0 -v
 ```
 This will produce a zip `build/swift4/Hello.zip`
 
 ### SwiftyJSON using single source action file
-If you have a swift:3.1.1 action not compiled, meaning just as single source file using the `SwiftyJSON` package, you need to precompile your action and specify the version of SwiftyJSON you wan to use for swift:4 kind action.
+If you have a swift:3.1.1 action not compile, just as source using the `SwiftyJSON` package, you need to precompile your action and specify the version of SwiftyJSON you wan to use for swift:4.0 kind action.
 Take into account that tarting with Swift 4 there is better support to manage JSON data natively.
 
 Note: This is only applicable to the base image provided for the Swift 4 runtime, other downstream such as IBM Cloud Functions extending this image might provide additional SDK and packages including `SwiftyJSON` and IBM Watson SDK, check the vendor documentation for more specific information about packages and versions.
 
 ### Building the Swift4 Image
 ```
-./gradlew swift4:distDocker
+./gradlew core:swift40Action:distDocker
 ```
-This will produce the image `whisk/action-swift-v4`
+This will produce the image `whisk/action-swift-v4.0`
 
-Login into Docker Client if not already authenticated
+Build and Push image
 ```
 docker login
-```
-Build Image (Optional also push using `dockerRegistry` property)
-```
-./gradlew swift4:distDocker -PdockerRegistry=docker.io -PdockerImagePrefix=$DOCKER_USER -PdockerImageTag=${IMAGE_TAG:-"latest"}
+./gradlew core:swift40Action:distDocker -PdockerImagePrefix=$prefix-user -PdockerRegistry=docker.io 
 ```
 
+### Swift 4.1 Experimental
+We have a runtime for swift 4.1, is experimental as we are trying beta builds released by Swift org.
+Follow same insructions for Swift 4.0 above and replace the kind wih `swift:4.1` and image with `openwhisk/action-swift-v4.0`
+
+
+### Using Swift 3.1.1
+To use as a docker action
+```
+wsk action update myAction myAction.swift --docker openwhisk/action-swift-v3.1.1:1.0.0
+```
+This works on any deployment of Apache OpenWhisk
+
+### To use on deployment that contains the rutime as a kind
+To use as a kind action
+```
+wsk action update myAction myAction.swift --kind swift:3.1.1
+```
 
 ### Local development
+```
+./gradlew core:swiftAction:distDocker
+```
+This will produce the image `whisk/action-swift-v3.1.1`
 
-Deploy OpenWhisk using ansible environment that contains the kind `swift:4`
+Build and Push image
+```
+docker login
+./gradlew core:swiftAction:distDocker -PdockerImagePrefix=$prefix-user -PdockerRegistry=docker.io 
+```
+
+Deploy OpenWhisk using ansible environment that contains the kind `swift:3.1.1`
 Assuming you have OpenWhisk already deploy localy and `OPENWHISK_HOME` pointing to root directory of OpenWhisk core repository.
 
 Set `ROOTDIR` to the root directory of this repository.
@@ -176,17 +206,17 @@ $ANSIBLE_CMD openwhisk.yml
 Or you can use `wskdev` and create a soft link to the target ansible environment, for example:
 ```
 ln -s ${ROOTDIR}/ansible/environments/local ${OPENWHISK_HOME}/ansible/environments/local-swift
-${OPENWHISK_HOME}/wskdev fresh -t local-swift
+wskdev fresh -t local-swift
 ```
 
 To use as docker action push to your own dockerhub account
 ```
-docker tag whisk/action-swift-v4n $user_prefix/action-swift-v4
-docker push $user_prefix/action-swift-v4
+docker tag whisk/action-swift-v3.1.1 $user_prefix/action-swift-v3.1.1
+docker push $user_prefix/action-swift-v3.1.1
 ```
 Then create the action using your the image from dockerhub
 ```
-wsk action update myAction myAction.swift --docker $user_prefix/action-swift-v4
+wsk action update myAction myAction.swift --docker $user_prefix/action-swift-v3.1.1
 ```
 The `$user_prefix` is usually your dockerhub user id.
 
