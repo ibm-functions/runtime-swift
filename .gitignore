@@ -3,6 +3,9 @@ nginx.conf
 whisk.properties
 default.props
 
+tests/credentials.json
+tests/vcap_services.json
+
 .ant-targets-build.xml
 /results/
 /logs/
