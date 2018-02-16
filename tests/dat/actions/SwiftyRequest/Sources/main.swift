@@ -1,6 +1,7 @@
 import SwiftyRequest
 import Dispatch
 import Foundation
+import LanguageTranslatorV2
 
 func main(args: [String:Any]) -> [String:Any] {
     var resp :[String:Any] = ["error":"Action failed"]
@@ -31,6 +32,26 @@ func main(args: [String:Any]) -> [String:Any] {
     _ = semaphore.wait(timeout: .distantFuture)
     return resp
 }
+
+func main2(args: [String:Any]) -> [String:Any] {
+    var resp :[String:Any] = ["translation":"To be translated"]
+    let dispatchGroup = DispatchGroup()
+    let username = args["username"] as! String
+    let password = args["password"] as! String
+    let languageTranslator = LanguageTranslator(username: username, password: password)
+    
+    let failure = { (error: Error) in print(error) }
+    dispatchGroup.enter()
+    languageTranslator.translate("Hello", from: "en", to: "es", failure: failure) {translation in
+        print(translation)
+        resp["translation"] = translation.translations[0].translation as String
+        dispatchGroup.leave()
+    }
+    dispatchGroup.wait(timeout: .distantFuture)
+    return resp
+}
+let params = ["username":"5f7b2061-ca43-4713-b11d-e79e99940826","password":"FgBTfQLicFdj"]
 //let r = main(args:["message":"serverless"])
-//print(r)
+let r = main2(args:params)
+print(r)
 
