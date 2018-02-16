@@ -6,8 +6,6 @@ scala:
 services:
 - docker
 before_install:
-- openssl aes-256-cbc -K $encrypted_a0b9052d7bd5_key -iv $encrypted_a0b9052d7bd5_iv
-  -in tests/credentials.json.enc -out tests/credentials.json -d
 - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then openssl aes-256-cbc -K $encrypted_a0b9052d7bd5_key -iv $encrypted_a0b9052d7bd5_iv -in tests/credentials.json.enc -out tests/credentials.json -d; fi'
 - "./tools/travis/setup.sh"
 install: true
