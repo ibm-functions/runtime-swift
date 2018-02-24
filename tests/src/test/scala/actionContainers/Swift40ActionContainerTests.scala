@@ -26,8 +26,8 @@ import spray.json.{JsObject, JsString}
 class Swift40ActionContainerTests extends SwiftActionContainerTests {
 
   override lazy val swiftContainerImageName = "action-swift-v4.0"
-  override lazy val swiftBinaryName = System.getProperty("user.dir") + "/dat/build/swift4.0/HelloSwift4.zip"
-  lazy val partyCompile = System.getProperty("user.dir") + "/dat/build/swift4.0/SwiftyRequest.zip"
+  override lazy val swiftBinaryName = "tests/dat/build/swift4.0/HelloSwift4.zip"
+  lazy val partyCompile = "tests/dat/build/swift4.0/SwiftyRequest.zip"
 
   val httpCode = """
        | import Dispatch

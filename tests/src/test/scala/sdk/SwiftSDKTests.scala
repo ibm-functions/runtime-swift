@@ -36,7 +36,7 @@ abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with Matche
   lazy val lang = actionKind.split(":")(0)
   lazy val majorVersion = actionKind.split(":")(1).split('.')(0)
   lazy val actionDir = s"$lang$majorVersion"
-  lazy val actionTypeDir: String = System.getProperty("user.dir") + "/dat/actions/sdk/" + actionDir
+  lazy val actionTypeDir: String = "tests/dat/actions/sdk/" + actionDir
   val controllerHost = WhiskProperties.getBaseControllerHost()
   val controllerPort = WhiskProperties.getControllerBasePort()
   val baseUrl = s"http://$controllerHost:$controllerPort"
