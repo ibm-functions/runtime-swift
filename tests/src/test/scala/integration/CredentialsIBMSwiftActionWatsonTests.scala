@@ -31,7 +31,7 @@ class CredentialsIBMSwiftActionWatsonTests extends TestHelpers with WskTestHelpe
   implicit val wskprops: WskProps = WskProps()
   val wsk = new WskRest
   lazy val actionKind = "swift:4.0"
-  lazy val datdir: String = System.getProperty("user.dir") + "/dat/actions/integration/"
+  lazy val datdir: String = "tests/dat/actions/integration/"
 
   var creds = TestUtils.getVCAPcredentials("language_translator")
 

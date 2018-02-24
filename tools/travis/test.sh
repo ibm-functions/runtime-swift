@@ -15,8 +15,6 @@ ${WHISK_CLI} action update echoSwift40 ${ROOTDIR}/tests/dat/actions/echo/main.sw
 ${WHISK_CLI} action invoke echoSwift40 -b -p kind swift40
 ${WHISK_CLI} action update echoSwift41 ${ROOTDIR}/tests/dat/actions/echo/main.swift --kind "swift:4.1"
 ${WHISK_CLI} action invoke echoSwift41 -b -p kind swift41
-${WHISK_CLI} activation list
-${WHISK_CLI} activation get --last
 
 export OPENWHISK_HOME=$WHISKDIR
 cd ${ROOTDIR}

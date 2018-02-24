@@ -169,6 +169,10 @@ wsk action update myAction myAction.swift --kind swift:4.0
 ```
 
 ### Local development
+
+### Build
+Build all runtime images
+
 ```
 ./gradlew core:swiftAction:distDocker
 ```
@@ -180,6 +184,7 @@ docker login
 ./gradlew swift4.0:distDocker -PdockerImagePrefix=$prefix-user -PdockerRegistry=docker.io 
 ```
 
+## Deployment 
 Deploy OpenWhisk using ansible environment that contains the kind `swift:4.0`
 Assuming you have OpenWhisk already deploy localy and `OPENWHISK_HOME` pointing to root directory of OpenWhisk core repository.
 
@@ -202,6 +207,33 @@ ln -s ${ROOTDIR}/ansible/environments/local ${OPENWHISK_HOME}/ansible/environmen
 wskdev fresh -t local-swift
 ```
 
+### Testing
+Using gradle for the ActionContainer tests you need to use a proxy if running on Mac, if Linux then don't use proxy options
+You can pass the flags `-Dhttp.proxyHost=localhost -Dhttp.proxyPort=3128` directly in gradle command.
+Or save in your `$HOME/.gradle/gradle.properties`
+```
+systemProp.http.proxyHost=localhost
+systemProp.http.proxyPort=3128
+```
+Using gradle to run all tests
+```
+./gradlew :tests:test
+```
+Using gradle to run some tests
+```
+./gradlew :tests:test --tests *ActionContainerTests*
+```
+Using IntelliJ:
+- Import project as gradle project.
+- Make sure working directory is root of the project/repo
+- Add the following Java VM properties in ScalaTests Run Configuration, easiest is to change the Defaults for all ScalaTests to use this VM properties
+```
+-Dhttp.proxyHost=localhost
+-Dhttp.proxyPort=3128
+```
+
+
+#### Using container image to test
 To use as docker action push to your own dockerhub account
 ```
 docker tag whisk/action-swift-v4.0 $user_prefix/action-swift-v4.0

@@ -32,6 +32,7 @@ abstract class IBMWskBasicSwiftTests extends TestHelpers with WskTestHelpers {
   implicit val wskprops = WskProps()
   val wsk = new WskRest
   lazy val actionKind = "swift:4.0"
+  val activationPollDuration = 2.minutes
 
   behavior of s"Runtime $actionKind"
 
@@ -43,7 +44,7 @@ abstract class IBMWskBasicSwiftTests extends TestHelpers with WskTestHelpers {
       action.create(name = name, artifact = file, kind = Some(actionKind))
     }
 
-    withActivation(wsk.activation, wsk.action.invoke(name), initialWait = 5 seconds, totalWait = 60 seconds) {
+    withActivation(wsk.activation, wsk.action.invoke(name), initialWait = 5 seconds, totalWait = activationPollDuration) {
       activation =>
         // should be successful
         activation.response.success shouldBe true
@@ -70,13 +71,16 @@ abstract class IBMWskBasicSwiftTests extends TestHelpers with WskTestHelpers {
         action.create(name = name, artifact = file, main = Some("niam"), kind = Some(actionKind))
       }
 
-      withActivation(wsk.activation, wsk.action.invoke(name), initialWait = 5 seconds, totalWait = 60 seconds) {
-        activation =>
-          // should be successful
-          activation.response.success shouldBe true
-          activation.response.result.get.fields.get("error") shouldBe empty
-          activation.response.result.get.fields.get("greetings") should be(
-            Some(JsString("Hello from a non-standard entrypoint.")))
+      withActivation(
+        wsk.activation,
+        wsk.action.invoke(name),
+        initialWait = 5 seconds,
+        totalWait = activationPollDuration) { activation =>
+        // should be successful
+        activation.response.success shouldBe true
+        activation.response.result.get.fields.get("error") shouldBe empty
+        activation.response.result.get.fields.get("greetings") should be(
+          Some(JsString("Hello from a non-standard entrypoint.")))
       }
 
   }
