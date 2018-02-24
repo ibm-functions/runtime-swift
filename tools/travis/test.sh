@@ -20,7 +20,7 @@ export OPENWHISK_HOME=$WHISKDIR
 cd ${ROOTDIR}
 TERM=dumb ./gradlew :tests:checkScalafmtAll
 if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
-  TERM=dumb ./gradlew :tests:test --project-dir $(pwd)
+  TERM=dumb ./gradlew :tests:test
 else
-  TERM=dumb ./gradlew :tests:testWithoutCredentials --project-dir $(pwd)
+  TERM=dumb ./gradlew :tests:testWithoutCredentials
 fi
