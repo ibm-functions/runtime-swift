@@ -17,6 +17,10 @@ tasks.withType(Test) {
     outputs.upToDateWhen { false } // force tests to run every time
 }
 
+task testSwift41(type: Test) {
+    exclude '**/*Swift40*'
+}
+
 task testWithoutCredentials(type: Test) {
     exclude '**/*Credentials*'
 }
