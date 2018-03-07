@@ -19,7 +19,8 @@ package runtime.actionContainers
 
 import java.io.File
 import common.WskActorSystem
-import ActionContainer.withContainer
+import actionContainers.{ActionContainer, ActionProxyContainerTestUtils, ResourceHelpers}
+import actionContainers.ActionContainer.withContainer
 import spray.json.DefaultJsonProtocol._
 import spray.json._
 

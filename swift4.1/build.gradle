@@ -1,2 +1,29 @@
 ext.dockerImageName = 'action-swift-v4.1'
 apply from: '../gradle/docker.gradle'
+
+distDocker.dependsOn 'copyEpilogue'
+distDocker.dependsOn 'copyWhisk'
+distDocker.dependsOn 'copyPackageSwift'
+distDocker.finalizedBy('cleanup')
+
+
+task copyEpilogue(type: Copy) {
+    from '../swift4.0/epilogue.swift'
+    into '.'
+}
+
+task copyWhisk(type: Copy) {
+    from '../swift4.0/spm-build/_Whisk.swift'
+    into './spm-build'
+}
+
+task copyPackageSwift(type: Copy) {
+    from '../swift4.0/spm-build/Package.swift'
+    into './spm-build'
+}
+
+task cleanup(type: Delete) {
+    delete 'epilogue.swift'
+    delete 'spm-build/_Whisk.swift'
+    delete 'spm-build/Package.swift'
+}

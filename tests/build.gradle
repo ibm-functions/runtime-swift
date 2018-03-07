@@ -17,6 +17,10 @@ tasks.withType(Test) {
     outputs.upToDateWhen { false } // force tests to run every time
 }
 
+task testSwift41(type: Test) {
+    exclude '**/*Swift40*'
+}
+
 task testWithoutCredentials(type: Test) {
     exclude '**/*Credentials*'
 }
@@ -24,6 +28,26 @@ task testWithoutCredentials(type: Test) {
 task testBlueDeployment(type: Test) {
     include 'integration/**'
     include 'runtime/system/**'
+}
+
+task testSDK(type: Test) {
+    include 'runtime/sdk/**'
+}
+
+task testWithoutCredentialsSwift41(type: Test) {
+    exclude '**/*Credentials*'
+    exclude '**/*Swift40*'
+}
+
+task testBlueDeploymentSwift41(type: Test) {
+    include 'integration/**'
+    include 'runtime/system/**'
+    exclude '**/*Swift40*'
+}
+
+task testSDKSwift41(type: Test) {
+    include 'runtime/sdk/**'
+    exclude '**/*Swift40*'
 }
 
 dependencies {

@@ -20,7 +20,8 @@ package runtime.actionContainers
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 import spray.json.{JsObject, JsString}
-import ActionContainer.withContainer
+import actionContainers.ActionContainer
+import actionContainers.ActionContainer.withContainer
 import common.WskActorSystem
 
 @RunWith(classOf[JUnitRunner])

@@ -26,7 +26,7 @@ import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 
 @RunWith(classOf[JUnitRunner])
-class CredentialsIBMSwiftActionWatsonTests extends TestHelpers with WskTestHelpers {
+class CredentialsIBMSwift40ActionWatsonTests extends TestHelpers with WskTestHelpers {
 
   implicit val wskprops: WskProps = WskProps()
   val wsk = new WskRest
@@ -38,25 +38,26 @@ class CredentialsIBMSwiftActionWatsonTests extends TestHelpers with WskTestHelpe
   /*
     Uses Watson Translation Service to translate the word "Hello" in English, to "Hola" in Spanish.
    */
-  it should "Test whether watson translate service is reachable" in withAssetCleaner(wskprops) { (wp, assetHelper) =>
-    val file = Some(new File(datdir, "testWatsonAction.swift").toString())
-    assetHelper.withCleaner(wsk.action, "testWatsonAction") { (action, _) =>
-      action.create(
-        "testWatsonAction",
-        file,
-        main = Some("main"),
-        kind = Some(actionKind),
-        parameters = Map(
-          "url" -> JsString(creds.get("url")),
-          "username" -> JsString(creds.get("username")),
-          "password" -> JsString(creds.get("password"))))
-    }
+  it should s"Test whether watson translate service is reachable using $actionKind" in withAssetCleaner(wskprops) {
+    (wp, assetHelper) =>
+      val file = Some(new File(datdir, "testWatsonAction.swift").toString())
+      assetHelper.withCleaner(wsk.action, "testWatsonAction") { (action, _) =>
+        action.create(
+          "testWatsonAction",
+          file,
+          main = Some("main"),
+          kind = Some(actionKind),
+          parameters = Map(
+            "url" -> JsString(creds.get("url")),
+            "username" -> JsString(creds.get("username")),
+            "password" -> JsString(creds.get("password"))))
+      }
 
-    withActivation(wsk.activation, wsk.action.invoke("testWatsonAction")) { activation =>
-      val response = activation.response
-      response.result.get.fields.get("error") shouldBe empty
-      response.result.get.fields("translation") shouldBe JsString("Hola")
-    }
+      withActivation(wsk.activation, wsk.action.invoke("testWatsonAction")) { activation =>
+        val response = activation.response
+        response.result.get.fields.get("error") shouldBe empty
+        response.result.get.fields("translation") shouldBe JsString("Hola")
+      }
 
   }
 
