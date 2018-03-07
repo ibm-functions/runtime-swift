@@ -2,6 +2,7 @@
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 /*
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -25,31 +26,9 @@ let package = Package(
         targets:  ["Action"]
       )
     ],
-    dependencies: [
-        .package(url: "https://github.com/watson-developer-cloud/swift-sdk", .upToNextMajor(from: "0.21.0"))
-    ],
     targets: [
       .target(
-        name: "Action",
-        dependencies: [
-          "AlchemyDataNewsV1",
-          "AlchemyLanguageV1",
-          "AlchemyVisionV1",
-          "ConversationV1",
-          "DialogV1",
-          "DiscoveryV1",
-          "DocumentConversionV1",
-          "LanguageTranslatorV2",
-          "NaturalLanguageClassifierV1",
-          "NaturalLanguageUnderstandingV1",
-          "PersonalityInsightsV2",
-          "PersonalityInsightsV3",
-          "RelationshipExtractionV1Beta",
-          "RetrieveAndRankV1",
-          "ToneAnalyzerV3",
-          "TradeoffAnalyticsV1",
-          "VisualRecognitionV3"
-          ]
+        name: "Action"
       )
     ]
 )

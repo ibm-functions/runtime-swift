@@ -22,6 +22,76 @@ func main(args: [String:Any]) -> [String:Any] {
 ```
 
 ## Swift 4.x support
+
+Some examples of using Codable In and Out
+### Codable style function signature
+Create file `helloCodableAsync.swift`
+```swift
+// Domain model/entity
+struct Employee: Codable {
+  let id: Int?
+  let name: String?
+}
+// codable main function
+func main(input: Employee, respondWith: (Employee?, Error?) -> Void) -> Void {
+    // For simplicity, just passing same Employee instance forward
+    respondWith(input, nil)
+}
+```
+```
+wsk action update helloCodableAsync helloCodableAsync.swift swift:4.1
+```
+ok: updated action helloCodableAsync
+```
+wsk action invoke helloCodableAsync -r -p id 42 -p name Carlos
+```
+```json
+{
+    "id": 42,
+    "name": "Carlos"
+}
+```
+
+### Codable Error Handling
+Create file `helloCodableAsync.swift`
+```swift
+struct Employee: Codable {
+    let id: Int?
+    let name: String?
+}
+enum VendingMachineError: Error {
+    case invalidSelection
+    case insufficientFunds(coinsNeeded: Int)
+    case outOfStock
+}
+func main(input: Employee, respondWith: (Employee?, Error?) -> Void) -> Void {
+    // Return real error
+    do{
+        throw VendingMachineError.insufficientFunds(coinsNeeded: 5)
+    } catch {
+        respondWith(nil, error)
+    } 
+}
+```
+```
+wsk action update helloCodableError helloCodableError.swift swift:4.1
+```
+ok: updated action helloCodableError
+```
+wsk action invoke helloCodableError -b -p id 42 -p name Carlos
+```
+```json
+{
+"name": "helloCodableError",
+"response": {
+  "result": {
+    "error": "insufficientFunds(5)"
+  },
+"status": "application error",
+"success": false
+}
+```
+
 ### Packaging an action as a Swift executable using Swift 4
 
 When you create an OpenWhisk Swift action with a Swift source file, it has to be compiled into a binary before the action is run. Once done, subsequent calls to the action are much faster until the container holding your action is purged. This delay is known as the cold-start delay.
@@ -115,7 +185,7 @@ let package = Package(
   wsk action invoke helloSwiftly --blocking
   ```
 
-### Migrating from Swift 3 to Swift 4
+## Migrating from Swift 3 to Swift 4
 
 ### Helper compile.sh helper script
 When compiling and packaging your swift 4 action, there are a couple of differences.
@@ -145,22 +215,6 @@ Take into account that tarting with Swift 4 there is better support to manage JS
 
 Note: This is only applicable to the base image provided for the Swift 4 runtime, other downstream such as IBM Cloud Functions extending this image might provide additional SDK and packages including `SwiftyJSON` and IBM Watson SDK, check the vendor documentation for more specific information about packages and versions.
 
-### Building the Swift4 Image
-```
-./gradlew core:swift40Action:distDocker
-```
-This will produce the image `whisk/action-swift-v4.0`
-
-Build and Push image
-```
-docker login
-./gradlew core:swift40Action:distDocker -PdockerImagePrefix=$prefix-user -PdockerRegistry=docker.io 
-```
-
-### Swift 4.1 Experimental
-We have a runtime for swift 4.1, is experimental as we are trying beta builds released by Swift org.
-Follow same insructions for Swift 4.0 above and replace the kind wih `swift:4.1` and image with `ibmfunctions/action-swift-v4.1`
-
 
 ### To use on deployment that contains the rutime as a kind
 To use as a kind action
@@ -174,14 +228,14 @@ wsk action update myAction myAction.swift --kind swift:4.0
 Build all runtime images
 
 ```
-./gradlew core:swiftAction:distDocker
+./gradlew :swift4.0:distDocker :swift4.1:distDocker
 ```
-This will produce the image `whisk/action-swift-v4.0`
+This will produce the image `whisk/action-swift-v4.0` and `whisk/action-swift-v4.1`
 
 Build and Push image
 ```
 docker login
-./gradlew swift4.0:distDocker -PdockerImagePrefix=$prefix-user -PdockerRegistry=docker.io 
+./gradlew :swift4.0:distDocker :swift4.1:distDocker -PdockerImagePrefix=$prefix-user -PdockerRegistry=docker.io 
 ```
 
 ## Deployment 
@@ -208,13 +262,11 @@ wskdev fresh -t local-swift
 ```
 
 ### Testing
-Using gradle for the ActionContainer tests you need to use a proxy if running on Mac, if Linux then don't use proxy options
-You can pass the flags `-Dhttp.proxyHost=localhost -Dhttp.proxyPort=3128` directly in gradle command.
-Or save in your `$HOME/.gradle/gradle.properties`
+Install dependencies from the root directory on $OPENWHISK_HOME repository
 ```
-systemProp.http.proxyHost=localhost
-systemProp.http.proxyPort=3128
+./gradlew :common:scala:install :core:controller:install :core:invoker:install :tests:install
 ```
+
 Using gradle to run all tests
 ```
 ./gradlew :tests:test
@@ -226,11 +278,6 @@ Using gradle to run some tests
 Using IntelliJ:
 - Import project as gradle project.
 - Make sure working directory is root of the project/repo
-- Add the following Java VM properties in ScalaTests Run Configuration, easiest is to change the Defaults for all ScalaTests to use this VM properties
-```
--Dhttp.proxyHost=localhost
--Dhttp.proxyPort=3128
-```
 
 
 #### Using container image to test

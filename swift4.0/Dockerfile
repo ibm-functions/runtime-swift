@@ -1,9 +1,12 @@
 # Dockerfile for swift actions, overrides and extends ActionRunner from actionProxy
-# TODO replace with openwhisk/action-swift-v4.0
 FROM openwhisk/action-swift-v4.0:1.0.1
 
 # Add Pre-Installed Pacakges for IBM
 ADD spm-build/Package.swift /swift4Action/spm-build
+
+# TODO replace with upstream when issue gets promoted https://github.com/apache/incubator-openwhisk-runtime-swift/pull/23
+ADD epilogue.swift /swift4Action
+ADD spm-build/_Whisk.swift /swift4Action/spm-build/Sources/Action
 
 # Build
 RUN touch /swift4Action/spm-build/Sources/Action/main.swift
