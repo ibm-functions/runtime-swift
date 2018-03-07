@@ -26,6 +26,6 @@ import org.scalatest.junit.JUnitRunner
 class IBMWskUnicodeSwift41Tests extends WskUnicodeTests {
 
   override val wsk: common.rest.WskRest = new WskRest
-  override lazy val actionKind = "swift:4.0"
+  override lazy val actionKind = "swift:4.1"
   override lazy val actionSource = "unicode.swift"
 }
