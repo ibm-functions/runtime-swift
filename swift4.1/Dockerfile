@@ -1,11 +1,11 @@
-# TODO Replace this dockerfile and extend from official image when 4.1 is released
+# TODO:Replace this dockerfile and extend from official image when 4.1 is released
 FROM ibmcom/ubuntu:14.04
 LABEL Description="Linux Ubuntu 14.04 image with the Swift binaries and tools."
 
 USER root
 
 # Set environment variables for image
-ENV SWIFT_SNAPSHOT swift-4.1-DEVELOPMENT-SNAPSHOT-2018-03-01-a
+ENV SWIFT_SNAPSHOT swift-4.1-DEVELOPMENT-SNAPSHOT-2018-03-05-a
 ENV SWIFT_SNAPSHOT_LOWERCASE swift-4.1-branch
 ENV UBUNTU_VERSION ubuntu14.04
 ENV UBUNTU_VERSION_NO_DOTS ubuntu1404
@@ -65,13 +65,19 @@ ADD https://raw.githubusercontent.com/apache/incubator-openwhisk-runtime-swift/4
 # Add Pre-Installed Pacakges for IBM
 ADD spm-build/Package.swift /swift4Action/spm-build
 
-# TODO replace with upstream  https://github.com/apache/incubator-openwhisk-runtime-swift/pull/23
+# TODO: replace with upstream  https://github.com/apache/incubator-openwhisk-runtime-swift/pull/23
 ADD epilogue.swift /swift4Action
 ADD spm-build/_Whisk.swift /swift4Action/spm-build/Sources/Action
 
 # Build
 RUN touch /swift4Action/spm-build/Sources/Action/main.swift
-# TODO uncomment the following line with upstream https://github.com/apache/incubator-openwhisk-runtime-swift/pull/23
+# TODO: uncomment the following line with upstream https://github.com/apache/incubator-openwhisk-runtime-swift/pull/23
 #RUN rm /swift4Action/spm-build/swiftbuildandlink.sh
 RUN python /swift4Action/buildandrecord.py && rm /swift4Action/spm-build/.build/release/Action
 #RUN cd /swift4Action/spm-build; swift build -v -c release; rm /swift4Action/spm-build/.build/release/Action
+
+# TODO: remove after using upstream https://github.com/apache/incubator-openwhisk-runtime-swift/pull/23
+ENV FLASK_PROXY_PORT 8080
+EXPOSE 8080
+
+CMD ["/bin/bash", "-c", "cd /swift4Action && PYTHONIOENCODING='utf-8' python -u swift4runner.py"]
