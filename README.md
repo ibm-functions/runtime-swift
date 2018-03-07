@@ -2,8 +2,6 @@
 
 [![Build Status](https://travis-ci.org/ibm-functions/runtime-swift.svg?branch=master)](https://travis-ci.org/ibm-functions/runtime-swift)
 
-# WARNING: Under Construction
-
 ## Changelogs
 - [Swift 4.0   CHANGELOG.md](swift4.0/CHANGELOG.md)
 - [Swift 4.1   CHANGELOG.md](swift4.1/CHANGELOG.md)
