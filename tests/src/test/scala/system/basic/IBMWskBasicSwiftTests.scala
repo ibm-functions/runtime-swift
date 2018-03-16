@@ -19,14 +19,11 @@ package runtime.system.basic
 
 import common.rest.WskRest
 import common.{TestHelpers, TestUtils, WskProps, WskTestHelpers}
-import org.junit.runner.RunWith
-import org.scalatest.junit.JUnitRunner
 import spray.json._
 
 import scala.concurrent.duration.DurationInt
 import scala.language.postfixOps
 
-@RunWith(classOf[JUnitRunner])
 abstract class IBMWskBasicSwiftTests extends TestHelpers with WskTestHelpers {
 
   implicit val wskprops = WskProps()
