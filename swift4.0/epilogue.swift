@@ -17,16 +17,19 @@
 
 // Imports
 import Foundation
+import Dispatch
 
 let inputStr: String = readLine() ?? "{}"
 let json = inputStr.data(using: .utf8, allowLossyConversion: true)!
 
+let _whisk_semaphore = DispatchSemaphore(value: 0)
 func _whisk_print_error(message: String, error: Error?){
     if let error = error {
         print("{\"error\":\"\(message) \(error.localizedDescription)\"}")
     } else {
        print("{\"error\":\"\(message)\"}")
     }
+    _whisk_semaphore.signal()
 }
 
 // snippet of code "injected" (wrapper code for invoking traditional main)
@@ -39,6 +42,7 @@ func _run_main(mainFunction: ([String: Any]) -> [String: Any]) -> Void {
                 let jsonData = try JSONSerialization.data(withJSONObject: result, options: [])
                 if let jsonStr = String(data: jsonData, encoding: String.Encoding.utf8) {
                     print("\(jsonStr)")
+                    _whisk_semaphore.signal()
                 } else {
                     _whisk_print_error(message: "Error serializing data to JSON, data conversion returns nil string", error: nil)
                 }
@@ -71,6 +75,7 @@ func _run_main<In: Decodable, Out: Encodable>(mainFunction: @escaping (In, @esca
                 let jsonData = try Whisk.jsonEncoder.encode(out)
                 let jsonString = String(data: jsonData, encoding: .utf8)
                 print("\(jsonString!)")
+                _whisk_semaphore.signal()
             } catch let error as EncodingError {
                 _whisk_print_error(message: "JSONEncoder failed to encode Codable type to JSON string:", error: error)
                 return
@@ -104,6 +109,7 @@ func _run_main<Out: Encodable>(mainFunction: @escaping ( @escaping (Out?, Error?
             let jsonData = try Whisk.jsonEncoder.encode(out)
             let jsonString = String(data: jsonData, encoding: .utf8)
             print("\(jsonString!)")
+            _whisk_semaphore.signal()
         } catch let error as EncodingError {
             _whisk_print_error(message: "JSONEncoder failed to encode Codable type to JSON string:", error: error)
             return

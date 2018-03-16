@@ -56,6 +56,12 @@ fi
 cat $BASE_PATH/epilogue.swift >> $DEST_SOURCE/main.swift
 echo '_run_main(mainFunction:main)' >> $DEST_SOURCE/main.swift
 
+# Only for Swift4
+if [ ${2} != "swift:3.1.1" ]; then
+  echo 'Adding wait to deal with escaping'
+  echo '_ = _whisk_semaphore.wait(timeout: .distantFuture)' >> $DEST_SOURCE/main.swift
+fi
+
 echo \"Compiling $1...\"
 cd /$BASE_PATH/spm-build
 cp /owexec/actions/$1/Package.swift $DEST_PACKAGE_SWIFT

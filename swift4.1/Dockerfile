@@ -60,7 +60,10 @@ ADD https://raw.githubusercontent.com/apache/incubator-openwhisk-runtime-docker/
 # Add files needed to build and run action
 RUN mkdir -p /swift4Action/spm-build/Sources/Action
 ADD https://raw.githubusercontent.com/apache/incubator-openwhisk-runtime-swift/4.1%400.1.0/core/swift41Action/buildandrecord.py /swift4Action/buildandrecord.py
-ADD https://raw.githubusercontent.com/apache/incubator-openwhisk-runtime-swift/4.1%400.1.0/core/swift40Action/swift4runner.py /swift4Action/swift4runner.py
+
+#TODO fix upstream then replace copy here
+#ADD https://raw.githubusercontent.com/apache/incubator-openwhisk-runtime-swift/4.1%400.1.0/core/swift40Action/swift4runner.py /swift4Action/swift4runner.py
+ADD swift4runner.py /swift4Action/swift4runner.py
 
 # Add Pre-Installed Pacakges for IBM
 ADD spm-build/Package.swift /swift4Action/spm-build

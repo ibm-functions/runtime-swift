@@ -7,6 +7,7 @@ ADD spm-build/Package.swift /swift4Action/spm-build
 # TODO replace with upstream when issue gets promoted https://github.com/apache/incubator-openwhisk-runtime-swift/pull/23
 ADD epilogue.swift /swift4Action
 ADD spm-build/_Whisk.swift /swift4Action/spm-build/Sources/Action
+ADD swift4runner.py /swift4Action/swift4runner.py
 
 # Build
 RUN touch /swift4Action/spm-build/Sources/Action/main.swift
