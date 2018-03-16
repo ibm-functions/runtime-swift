@@ -50,8 +50,5 @@ func main2(args: [String:Any]) -> [String:Any] {
     dispatchGroup.wait(timeout: .distantFuture)
     return resp
 }
-let params = ["username":"5f7b2061-ca43-4713-b11d-e79e99940826","password":"FgBTfQLicFdj"]
-//let r = main(args:["message":"serverless"])
-let r = main2(args:params)
-print(r)
+
 
