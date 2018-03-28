@@ -14,9 +14,7 @@ RUNTIME_VERSION=$2
 IMAGE_TAG=$3
 
 
-if [ ${RUNTIME_VERSION} == "4.0" ]; then
-  RUNTIME="swift4.0"
-elif [ ${RUNTIME_VERSION} == "4.1" ]; then
+if [ ${RUNTIME_VERSION} == "4.1" ]; then
   RUNTIME="swift4.1"
 fi
 

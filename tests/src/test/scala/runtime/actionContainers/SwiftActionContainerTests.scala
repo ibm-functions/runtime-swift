@@ -29,9 +29,49 @@ abstract class SwiftActionContainerTests extends BasicActionRunnerTests with Wsk
   // note: "out" will likely not be empty in some swift build as the compiler
   // prints status messages and there doesn't seem to be a way to quiet them
   val enforceEmptyOutputStream = false
-  lazy val swiftContainerImageName = "action-swift-v4.0"
-  lazy val swiftBinaryName = "tests/dat/actions/swift4zip/build/Hello.zip"
-  val httpCode: String
+  lazy val swiftContainerImageName = "action-swift-v4.1"
+  lazy val swiftBinaryName = "tests/dat/build/swift4.1/HelloSwift4.zip"
+  lazy val partyCompile = "tests/dat/build/swift4.1/SwiftyRequest.zip"
+  lazy val partyCompileCodable = "tests/dat/build/swift4.1/SwiftyRequestCodable.zip"
+
+  val httpCode = """
+                   | import Dispatch
+                   | func main(args:[String: Any]) -> [String:Any] {
+                   |     var resp :[String:Any] = ["error":"getUrl failed"]
+                   |     guard let urlStr = args["getUrl"] as? String else {
+                   |         return ["error":"getUrl not found in action input"]
+                   |     }
+                   |     guard let url = URL(string: urlStr) else {
+                   |         return ["error":"invalid url string \(urlStr)"]
+                   |     }
+                   |     let request = URLRequest(url: url)
+                   |     let session = URLSession(configuration: .default)
+                   |     let semaphore = DispatchSemaphore(value: 0)
+                   |     let task = session.dataTask(with: request, completionHandler: {data, response, error -> Void in
+                   |         print("done with http request")
+                   |         if let error = error {
+                   |             print("There was an error \(error)")
+                   |         } else if let data = data,
+                   |             let response = response as? HTTPURLResponse,
+                   |             response.statusCode == 200 {
+                   |             do {
+                   |                 let respJson = try JSONSerialization.jsonObject(with: data)
+                   |                 if respJson is [String:Any] {
+                   |                     resp = respJson as! [String:Any]
+                   |                 } else {
+                   |                     resp = ["error":"Response from server is not a dictionary"]
+                   |                 }
+                   |             } catch {
+                   |                 resp = ["error":"Error creating json from response: \(error)"]
+                   |             }
+                   |         }
+                   |         semaphore.signal()
+                   |     })
+                   |     task.resume()
+                   |     _ = semaphore.wait(timeout: .distantFuture)
+                   |     return resp
+                   | }
+                 """.stripMargin
 
   behavior of swiftContainerImageName
 
@@ -244,6 +284,67 @@ abstract class SwiftActionContainerTests extends BasicActionRunnerTests with Wsk
         if (enforceEmptyOutputStream) o shouldBe empty
         e shouldBe empty
     })
+  }
+  it should "support ability to use 3rd party packages like SwiftyRequest" in {
+    val zip = new File(partyCompile).toPath
+    val code = ResourceHelpers.readAsBase64(zip)
+
+    val (out, err) = withActionContainer() { c =>
+      val (initCode, initRes) = c.init(initPayload(code))
+      initCode should be(200)
+
+      val args = JsObject("message" -> (JsString("serverless")))
+      val (runCode, runRes) = c.run(runPayload(args))
+
+      runCode should be(200)
+      val json = runRes.get.fields.get("json")
+      json shouldBe Some(args)
+    }
+
+    checkStreams(out, err, {
+      case (o, e) =>
+        if (enforceEmptyOutputStream) o shouldBe empty
+        e shouldBe empty
+    })
+  }
+
+  it should "support ability to use escaping completion in Codable" in {
+    val zip = new File(partyCompileCodable).toPath
+    val code = ResourceHelpers.readAsBase64(zip)
+
+    val (out, err) = withActionContainer() { c =>
+      val (initCode, initRes) = c.init(initPayload(code, main = "mainCodable"))
+      initCode should be(200)
+
+      val (runCode, runRes) = c.run(runPayload(JsObject()))
+
+      runCode should be(200)
+      runRes.get.fields.get("greeting") shouldBe Some(JsString("success"))
+
+    }
+
+    checkStreams(out, err, {
+      case (o, e) =>
+        if (enforceEmptyOutputStream) o shouldBe empty
+        e shouldBe empty
+    })
+  }
+
+  it should "receive a large (1MB) argument" in {
+    withActionContainer() { c =>
+      val code = """
+                   | func main(args: [String: Any]) -> [String: Any] {
+                   |     return args
+                   | }
+                   |""".stripMargin
+
+      val (initCode, initRes) = c.init(initPayload(code))
+      initCode should be(200)
+
+      val arg = JsObject("arg" -> JsString(("a" * 1048561)))
+      val (_, runRes) = c.run(runPayload(arg))
+      runRes.get shouldBe arg
+    }
   }
 
   // Helpers specific to swift actions

@@ -15,13 +15,15 @@
  * limitations under the License.
  */
 
-package runtime.system.basic
+package runtime.actionContainers
 
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 
 @RunWith(classOf[JUnitRunner])
-class IBMWskBasicSwift40Tests extends IBMWskBasicSwiftTests {
-
-  override lazy val actionKind = "swift:4.0"
+class Swift41ActionContainerTests extends SwiftActionContainerTests {
+  override lazy val swiftContainerImageName = "action-swift-v4.1"
+  override lazy val swiftBinaryName = "tests/dat/build/swift4.1/HelloSwift4.zip"
+  override lazy val partyCompileCodable = "tests/dat/build/swift4.1/SwiftyRequestCodable.zip"
+  override lazy val partyCompile = "tests/dat/build/swift4.1/SwiftyRequest.zip"
 }

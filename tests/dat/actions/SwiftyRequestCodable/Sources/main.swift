@@ -17,8 +17,10 @@ func main(param: AnInput, completion: @escaping (AnOutput?, Error?) -> Void) -> 
     request.responseString(responseToError: nil) { response in
         switch response.result {
         case .success(let result):
+            print(result)
             completion(AnOutput(greeting:"success"),nil)
         case .failure(let error):
+            print(error)
             completion(nil,RequestError.requetError)
         }
     }

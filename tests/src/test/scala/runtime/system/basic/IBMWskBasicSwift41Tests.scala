@@ -15,12 +15,13 @@
  * limitations under the License.
  */
 
-package runtime.sdk
+package runtime.system.basic
 
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 
 @RunWith(classOf[JUnitRunner])
-class Swift41SDKTests extends Swift40SDKTests {
+class IBMWskBasicSwift41Tests extends IBMWskBasicSwiftTests {
+
   override lazy val actionKind = "swift:4.1"
 }

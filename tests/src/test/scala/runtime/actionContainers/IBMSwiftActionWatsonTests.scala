@@ -25,25 +25,21 @@ import actionContainers.ActionContainer.withContainer
 import common.WskActorSystem
 
 @RunWith(classOf[JUnitRunner])
-class IBMSwift40ActionWatsonTests extends BasicActionRunnerTests with WskActorSystem {
+class IBMSwiftActionWatsonTests extends BasicActionRunnerTests with WskActorSystem {
 
   val enforceEmptyOutputStream = false
-  val imageName = "action-swift-v4.0"
+  val imageName = "action-swift-v4.1"
   override def withActionContainer(env: Map[String, String] = Map.empty)(code: ActionContainer => Unit) = {
     withContainer(imageName, env)(code)
   }
 
   lazy val watsonCode = """
-    | import AlchemyDataNewsV1
     | import ConversationV1
     | import DiscoveryV1
-    | import DocumentConversionV1
     | import NaturalLanguageClassifierV1
     | import NaturalLanguageUnderstandingV1
     | import PersonalityInsightsV3
-    | import RetrieveAndRankV1
     | import ToneAnalyzerV3
-    | import TradeoffAnalyticsV1
     | import VisualRecognitionV3
     |
     | func main(args: [String:Any]) -> [String:Any] {
