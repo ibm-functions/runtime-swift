@@ -6,7 +6,7 @@ import LanguageTranslatorV2
 func main(args: [String:Any]) -> [String:Any] {
     var resp :[String:Any] = ["error":"Action failed"]
     let echoURL = "http://httpbin.org/post"
-    
+
     // setting body data to {"Data":"string"}
     let origJson: [String: Any] = args
     guard let data = try? JSONSerialization.data(withJSONObject: origJson, options: []) else {
@@ -39,15 +39,17 @@ func main2(args: [String:Any]) -> [String:Any] {
     let username = args["username"] as! String
     let password = args["password"] as! String
     let languageTranslator = LanguageTranslator(username: username, password: password)
-    
+    let request = TranslateRequest(text: ["Hello"], source: "en", target: "es")
+
     let failure = { (error: Error) in print(error) }
     dispatchGroup.enter()
-    languageTranslator.translate("Hello", from: "en", to: "es", failure: failure) {translation in
+
+    languageTranslator.translate(request: request, failure: failure) {translation in
         print(translation)
-        resp["translation"] = translation.translations[0].translation as String
+        resp["translation"] = translation.translations.first?.translationOutput as! String
         dispatchGroup.leave()
     }
-    dispatchGroup.wait(timeout: .distantFuture)
+    _ = dispatchGroup.wait(timeout: .distantFuture)
     return resp
 }
 

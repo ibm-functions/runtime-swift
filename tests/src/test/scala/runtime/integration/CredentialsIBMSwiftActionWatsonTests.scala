@@ -15,22 +15,19 @@
  * limitations under the License.
  */
 
-package integration
+package runtime.integration
 
 import java.io.File
 
 import common.rest.WskRest
 import common.{TestHelpers, TestUtils, WskProps, WskTestHelpers}
 import spray.json._
-import org.junit.runner.RunWith
-import org.scalatest.junit.JUnitRunner
 
-@RunWith(classOf[JUnitRunner])
-class CredentialsIBMSwift40ActionWatsonTests extends TestHelpers with WskTestHelpers {
+abstract class CredentialsIBMSwiftActionWatsonTests extends TestHelpers with WskTestHelpers {
 
   implicit val wskprops: WskProps = WskProps()
   val wsk = new WskRest
-  lazy val actionKind = "swift:4.0"
+  lazy val actionKind = "swift:4.1"
   lazy val datdir: String = "tests/dat/actions/integration/"
 
   var creds = TestUtils.getVCAPcredentials("language_translator")

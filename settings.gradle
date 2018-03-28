@@ -1,6 +1,5 @@
 include 'tests'
 
-include 'swift4.0'
 include 'swift4.1'
 
 rootProject.name = 'runtime-swift-ibm'

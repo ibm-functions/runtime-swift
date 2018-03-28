@@ -1,4 +1,15 @@
-# IBM Functions Swift 4.1 Runtime 
+# IBM Functions Swift 4.1 Runtime
+
+## 1.1.0
+Changes:
+  - update swift41 snapshot build to `2018-03-26-a`
+  - update watson sdk to version `0.22.0`
+  - sync with openwhisk upstream image
+
+Swift runtime version: [swift-4.1-DEVELOPMENT-SNAPSHOT-2018-03-26-a](https://swift.org/builds/swift-4.1-branch/ubuntu1404/swift-4.1-DEVELOPMENT-SNAPSHOT-2018-03-26-a/swift-4.1-DEVELOPMENT-SNAPSHOT-2018-03-26-a-ubuntu14.04.tar.gz)
+
+Packages included:
+  - [Watson SDK 0.22.0](https://github.com/watson-developer-cloud/swift-sdk/releases/tag/v0.22.0)
 
 ## 1.0.3
 Changes:

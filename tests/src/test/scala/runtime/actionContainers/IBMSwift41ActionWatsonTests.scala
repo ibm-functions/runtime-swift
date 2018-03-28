@@ -15,14 +15,14 @@
  * limitations under the License.
  */
 
-package integration
+package runtime.actionContainers
 
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 
 @RunWith(classOf[JUnitRunner])
-class CredentialsIBMSwift41ActionWatsonTests extends CredentialsIBMSwift40ActionWatsonTests {
+class IBMSwift41ActionWatsonTests extends IBMSwiftActionWatsonTests {
 
-  override lazy val actionKind = "swift:4.1"
+  override val imageName = "action-swift-v4.1"
 
 }
