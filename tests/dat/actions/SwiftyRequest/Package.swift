@@ -28,7 +28,7 @@ let package = Package(
     ],
     dependencies: [
       .package(url: "https://github.com/IBM-Swift/SwiftyRequest.git", .upToNextMajor(from: "1.0.0")),
-      .package(url: "https://github.com/watson-developer-cloud/swift-sdk", .exact("0.22.0"))
+      .package(url: "https://github.com/watson-developer-cloud/swift-sdk", .exact("0.23.2"))
     ],
     targets: [
       .target(
