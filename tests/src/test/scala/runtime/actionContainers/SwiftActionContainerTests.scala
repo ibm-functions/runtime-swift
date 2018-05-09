@@ -34,7 +34,7 @@ abstract class SwiftActionContainerTests extends BasicActionRunnerTests with Wsk
   lazy val partyCompile = "tests/dat/build/swift4.1/SwiftyRequest.zip"
   lazy val partyCompileCodable = "tests/dat/build/swift4.1/SwiftyRequestCodable.zip"
   val echoURLPost = "https://eu.httpbin.org/post"
-  val echoURLGet  = "https://eu.httpbin.org/get"
+  val echoURLGet = "https://eu.httpbin.org/get"
 
   val httpCode = """
                    | import Dispatch
@@ -295,7 +295,7 @@ abstract class SwiftActionContainerTests extends BasicActionRunnerTests with Wsk
       val (initCode, initRes) = c.init(initPayload(code))
       initCode should be(200)
 
-      val args = Map("message" -> JsString("serverless"),"url" -> JsString(echoURLPost))
+      val args = Map("message" -> JsString("serverless"), "url" -> JsString(echoURLPost))
       val (runCode, runRes) = c.run(runPayload(JsObject(args)))
 
       runCode should be(200)
