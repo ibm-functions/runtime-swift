@@ -2,6 +2,15 @@
 
 ## 1.5.0
 Changes:
+  - update watson sdk from version `0.25.0` to `0.26.0`
+
+Swift runtime version: [swift-4.1-RELEASE](https://swift.org/builds/swift-4.1-release/ubuntu1404/swift-4.1-RELEASE/swift-4.1-RELEASE-ubuntu14.04.tar.gz)
+
+Packages included:
+  - [Watson SDK 0.26.0](https://github.com/watson-developer-cloud/swift-sdk/releases/tag/v0.26.0)
+
+## 1.5.0
+Changes:
   - Update reference to Swift Docker image (tag 4.1@1.0.5)
 
 Swift runtime version: [swift-4.1-RELEASE](https://swift.org/builds/swift-4.1-release/ubuntu1404/swift-4.1-RELEASE/swift-4.1-RELEASE-ubuntu14.04.tar.gz)
