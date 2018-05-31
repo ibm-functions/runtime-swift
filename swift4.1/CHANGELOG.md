@@ -1,6 +1,6 @@
 # IBM Functions Swift 4.1 Runtime
 
-## 1.5.0
+## 1.6.0
 Changes:
   - update watson sdk from version `0.25.0` to `0.26.0`
 
