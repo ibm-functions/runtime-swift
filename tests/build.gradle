@@ -31,6 +31,10 @@ task testSDK(type: Test) {
     include 'runtime/sdk/**'
 }
 
+task testWithoutSDK(type: Test) {
+    exclude 'runtime/sdk/**'
+}
+
 dependencies {
     compile "org.scala-lang:scala-library:${gradle.scala.version}"
     compile "org.apache.openwhisk:openwhisk-tests:${gradle.openwhisk.version}:tests"
