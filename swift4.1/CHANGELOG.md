@@ -1,5 +1,14 @@
 # IBM Functions Swift 4.1 Runtime
 
+## 1.7.0
+Changes:
+  - update watson sdk from version `0.26.0` to `0.27.0`
+
+Swift runtime version: [swift-4.1-RELEASE](https://swift.org/builds/swift-4.1-release/ubuntu1404/swift-4.1-RELEASE/swift-4.1-RELEASE-ubuntu14.04.tar.gz)
+
+Packages included:
+  - [Watson SDK 0.26.0](https://github.com/watson-developer-cloud/swift-sdk/releases/tag/v0.26.0)
+
 ## 1.6.0
 Changes:
   - update watson sdk from version `0.25.0` to `0.26.0`
