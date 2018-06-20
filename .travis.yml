@@ -17,10 +17,12 @@ deploy:
     on:
       tags: true
       all_branches: true
+      repo: ibm-functions/runtime-swift
   - provider: script
     script: "./tools/travis/publish.sh ibmfunctions 4.1 master"
     on:
       branch: master
+      repo: ibm-functions/runtime-swift
 env:
   global:
   - secure: dndDlFixUN9sua36GlNYq43GucaPmQxQaGtqnRAToKDihTwXqDLksWw8OoXnBqnWMJu/X8j2cx1EAiFmDRO5RdOlILoOx2TqsIEN4Xeu6egLTqr9gri494AuhGC09MLOfVVXW5RsJY2I2D3PoehTNC4u9HxXYJMZp/0Y3kBok+ADp5O3TzC0e5DLFIsQcRxWo81tJ6qraI4xILej8LYPubLT1Zh9hmvWXtXl666gNTrV9vDAROtDU4fAfkv44tv5n5MJNUZWzyYhPpUcmnSetlBVxyX+SrTqvabCYmY0Vg7EvSc6a7fA5YoLpockA2K2VA9+q1Pzns3nDOdVUbt/rRiA5W6+Q5/JH5WkqnjZlGSoez0KXATA4CoSwBXCxuoqwfXlZyEnE71rZv/Kspeeb03I3GQbVihRN0NoAKJwK7AVJMPo4CLLz8WXBWd4Lg4BtTOasZi7gx4jitQ3akfNobxfA0YEb+jNQtRGFuP7KKwfyiz7xuuQoh6X+Q6mOgI/jHBqbilMDYaHLuVc7Avu6BL2UeKw82T1iru74qk2evebRxBaAvp4S0icPYcbBu6gMvNfwU1gj814o61tCn8eBKRR/fKWYSf6TwjutnZ+JRedNYUQA5JSZyQOzJQvQIEZoh8fTACnBJ/QJ6R2DtTGsI17A/ZLLHwM49uP4lVrKm4=
