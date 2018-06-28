@@ -17,19 +17,19 @@
 
 package runtime.sdk
 
+import common.rest.WskRestOperations
+import common.{TestHelpers, WhiskProperties, WskProps, WskTestHelpers, WskActorSystem}
 import java.io.File
 import scala.concurrent.duration.DurationInt
 import scala.language.postfixOps
 import org.scalatest.Matchers
-import common.{TestHelpers, WhiskProperties, WskProps, WskTestHelpers}
-import common.rest.WskRest
 import spray.json._
 import spray.json.DefaultJsonProtocol.StringJsonFormat
 
-abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with Matchers {
+abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with Matchers with WskActorSystem {
 
   implicit val wskprops = WskProps()
-  val wsk = new WskRest
+  val wsk = new WskRestOperations
   val activationPollDuration = 2.minutes
   lazy val actionKind = "swift:3.1.1"
   lazy val lang = actionKind.split(":")(0)

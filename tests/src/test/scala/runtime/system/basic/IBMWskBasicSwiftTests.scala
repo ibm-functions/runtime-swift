@@ -17,17 +17,17 @@
 
 package runtime.system.basic
 
-import common.rest.WskRest
-import common.{TestHelpers, TestUtils, WskProps, WskTestHelpers}
+import common.rest.WskRestOperations
+import common.{TestHelpers, TestUtils, WskProps, WskTestHelpers, WskActorSystem}
 import spray.json._
 
 import scala.concurrent.duration.DurationInt
 import scala.language.postfixOps
 
-abstract class IBMWskBasicSwiftTests extends TestHelpers with WskTestHelpers {
+abstract class IBMWskBasicSwiftTests extends TestHelpers with WskTestHelpers with WskActorSystem {
 
   implicit val wskprops = WskProps()
-  val wsk = new WskRest
+  val wsk = new WskRestOperations
   lazy val actionKind = "swift:4.0"
   val activationPollDuration = 2.minutes
 

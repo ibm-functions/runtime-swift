@@ -19,14 +19,14 @@ package runtime.integration
 
 import java.io.File
 
-import common.rest.WskRest
-import common.{TestHelpers, TestUtils, WskProps, WskTestHelpers}
+import common.rest.WskRestOperations
+import common.{TestHelpers, TestUtils, WskProps, WskTestHelpers, WskActorSystem}
 import spray.json._
 
-abstract class CredentialsIBMSwiftActionWatsonTests extends TestHelpers with WskTestHelpers {
+abstract class CredentialsIBMSwiftActionWatsonTests extends TestHelpers with WskTestHelpers with WskActorSystem {
 
   implicit val wskprops: WskProps = WskProps()
-  val wsk = new WskRest
+  val wsk = new WskRestOperations
   lazy val actionKind = "swift:4.1"
   lazy val datdir: String = "tests/dat/actions/integration/"
 
