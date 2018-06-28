@@ -20,7 +20,7 @@ package runtime.integration
 import java.io.File
 
 import common.rest.WskRestOperations
-import common.{TestHelpers, TestUtils, WskProps, WskTestHelpers, WskActorSystem}
+import common.{TestHelpers, TestUtils, WskActorSystem, WskProps, WskTestHelpers}
 import spray.json._
 
 abstract class CredentialsIBMSwiftActionWatsonTests extends TestHelpers with WskTestHelpers with WskActorSystem {

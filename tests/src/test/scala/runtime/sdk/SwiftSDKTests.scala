@@ -18,7 +18,7 @@
 package runtime.sdk
 
 import common.rest.WskRestOperations
-import common.{TestHelpers, WhiskProperties, WskProps, WskTestHelpers, WskActorSystem}
+import common.{TestHelpers, WhiskProperties, WskActorSystem, WskProps, WskTestHelpers}
 import java.io.File
 import scala.concurrent.duration.DurationInt
 import scala.language.postfixOps

@@ -18,7 +18,7 @@
 package runtime.system.basic
 
 import common.rest.WskRestOperations
-import common.{TestHelpers, TestUtils, WskProps, WskTestHelpers, WskActorSystem}
+import common.{TestHelpers, TestUtils, WskActorSystem, WskProps, WskTestHelpers}
 import spray.json._
 
 import scala.concurrent.duration.DurationInt
