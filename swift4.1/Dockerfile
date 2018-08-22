@@ -1,6 +1,6 @@
 # Dockerfile extends Apache OpenWhisk Swift image https://github.com/apache/incubator-openwhisk-runtime-swift/blob/master/core/swift41Action/Dockerfile
 # Using git hash https://github.com/apple/swift/commit/4432bfb0c5cf817119ee88ba6108e7c97e13a331
-FROM openwhisk/action-swift-v4.1:1.0.7
+FROM openwhisk/action-swift-v4.1:1.0.8
 
 # Add Pre-Installed Pacakges for IBM
 ADD spm-build/Package.swift /swift4Action/spm-build
