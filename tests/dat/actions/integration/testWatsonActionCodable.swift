@@ -1,6 +1,6 @@
 print("debug1")
 import Foundation
-import LanguageTranslatorV2
+import LanguageTranslatorV3
 
 
 struct Input: Codable {
@@ -12,7 +12,7 @@ struct Output: Codable {
     let translation: String
 }
 func main(param: Input, completion: @escaping (Output?, Error?) -> Void) -> Void {
-    let languageTranslator = LanguageTranslator(username: param.username , password: param.password)
+    let languageTranslator = LanguageTranslator(username: param.username , password: param.password, version: "2018-09-16")
     let request = TranslateRequest(text: ["Hello"], source: "en", target: "es")
     let failure = {(error: Error) in
         print(" calling translate Error")
