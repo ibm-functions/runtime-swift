@@ -1,5 +1,15 @@
 # IBM Functions Swift 4.1 Runtime
 
+## 1.11.0
+Changes:
+  - update watson sdk from version `0.32.0` to `0.34.0`
+  - update runtime with custom _Whisk.swift for IAM enablement
+
+Swift runtime version: [swift-4.1-RELEASE](https://swift.org/builds/swift-4.1-release/ubuntu1404/swift-4.1-RELEASE/swift-4.1-RELEASE-ubuntu14.04.tar.gz)
+
+Packages included:
+  - [Watson SDK 0.34.0](https://github.com/watson-developer-cloud/swift-sdk/releases/tag/v0.34.0)
+
 ## 1.10.0
 Changes:
   - update watson sdk from version `0.29.0` to `0.32.0`
