@@ -3,7 +3,8 @@
 FROM openwhisk/action-swift-v4.1:1.0.8
 
 # Add Pre-Installed Pacakges for IBM
-ADD spm-build/Package.swift /swift4Action/spm-build
+COPY spm-build/Package.swift /swift4Action/spm-build/Package.swift
+COPY spm-build/_Whisk.swift /swift4Action/spm-build/Sources/Action/_Whisk.swift
 
 # Build
 RUN rm /swift4Action/spm-build/swiftbuildandlink.sh

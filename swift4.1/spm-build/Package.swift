@@ -26,7 +26,7 @@ let package = Package(
       )
     ],
     dependencies: [
-        .package(url: "https://github.com/watson-developer-cloud/swift-sdk", .exact("0.32.0"))
+        .package(url: "https://github.com/watson-developer-cloud/swift-sdk", .exact("0.34.0"))
     ],
     targets: [
       .target(
@@ -35,7 +35,7 @@ let package = Package(
           "AssistantV1",
           "ConversationV1",
           "DiscoveryV1",
-          "LanguageTranslatorV2",
+          "LanguageTranslatorV3",
           "NaturalLanguageClassifierV1",
           "NaturalLanguageUnderstandingV1",
           "PersonalityInsightsV3",
