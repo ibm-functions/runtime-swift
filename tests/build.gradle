@@ -22,10 +22,16 @@ task testWithoutCredentials(type: Test) {
     exclude '**/*Credentials*'
 }
 
+// intended for mainBlueWhisk pipeline
+task testBlueCI(type: Test) {
+    exclude 'runtime/sdk/**'
+}
+
 task testBlueDeployment(type: Test) {
     include 'runtime/integration/**'
     include 'runtime/system/**'
 }
+testBlueCI
 
 task testSDK(type: Test) {
     include 'runtime/sdk/**'
