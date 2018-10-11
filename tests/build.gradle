@@ -31,7 +31,6 @@ task testBlueDeployment(type: Test) {
     include 'runtime/integration/**'
     include 'runtime/system/**'
 }
-testBlueCI
 
 task testSDK(type: Test) {
     include 'runtime/sdk/**'
