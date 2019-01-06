@@ -34,7 +34,6 @@ class IBMSwiftActionWatsonTests extends BasicActionRunnerTests with WskActorSyst
   }
 
   lazy val watsonCode = """
-    | import ConversationV1
     | import DiscoveryV1
     | import NaturalLanguageClassifierV1
     | import NaturalLanguageUnderstandingV1
