@@ -31,6 +31,7 @@ let package = Package(
     targets: [
       .target(
         name: "Action",
+        path: ".",
         dependencies: [
           "AssistantV1",
           "AssistantV2",
