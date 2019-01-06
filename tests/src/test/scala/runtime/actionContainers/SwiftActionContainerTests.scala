@@ -216,6 +216,39 @@ abstract class SwiftActionContainerTests extends BasicActionRunnerTests with Wsk
     })
   }
 
+  lazy val watsonCode = """
+                          | import DiscoveryV1
+                          | import NaturalLanguageClassifierV1
+                          | import NaturalLanguageUnderstandingV1
+                          | import PersonalityInsightsV3
+                          | import ToneAnalyzerV3
+                          | import VisualRecognitionV3
+                          |
+                          | func main(args: [String:Any]) -> [String:Any] {
+                          |     return ["message": "I compiled and was able to import Watson SDKs"]
+                          | }
+                        """.stripMargin
+
+  it should "make Watson SDKs available to action authors" in {
+    val (out, err) = withActionContainer() { c =>
+      val code = watsonCode
+
+      val (initCode, _) = c.init(initPayload(code))
+
+      initCode should be(200)
+
+      val args = JsObject("message" -> (JsString("serverless")))
+      val (runCode, out) = c.run(runPayload(args))
+      runCode should be(200)
+    }
+
+    checkStreams(out, err, {
+      case (o, e) =>
+        if (enforceEmptyOutputStream) o shouldBe empty
+        e shouldBe empty
+    })
+  }
+
   // Helpers specific to swift actions
   override def withActionContainer(env: Map[String, String] = Map.empty)(code: ActionContainer => Unit) = {
     withContainer(swiftContainerImageName, env)(code)
