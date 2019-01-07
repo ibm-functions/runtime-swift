@@ -29,6 +29,8 @@ abstract class CredentialsIBMSwiftActionWatsonTests extends TestHelpers with Wsk
   val wsk = new WskRestOperations
   lazy val actionKind = "swift:4.1"
   lazy val datdir: String = "tests/dat/actions/integration/"
+  lazy val dictWatsonFile = "testWatsonAction.swift"
+  lazy val codWatsonFile = "testWatsonActionCodable.swift"
 
   var creds = TestUtils.getVCAPcredentials("language_translator")
 
@@ -38,7 +40,7 @@ abstract class CredentialsIBMSwiftActionWatsonTests extends TestHelpers with Wsk
 
   it should s"Test whether watson translate service is reachable using Dictionary $actionKind" in withAssetCleaner(
     wskprops) { (wp, assetHelper) =>
-    val file = Some(new File(datdir, "testWatsonAction.swift").toString())
+    val file = Some(new File(datdir, dictWatsonFile).toString())
     assetHelper.withCleaner(wsk.action, "testWatsonAction") { (action, _) =>
       action.create(
         "testWatsonAction",
@@ -61,7 +63,7 @@ abstract class CredentialsIBMSwiftActionWatsonTests extends TestHelpers with Wsk
 
   it should s"Test whether watson translate service is reachable using using Codable $actionKind" in withAssetCleaner(
     wskprops) { (wp, assetHelper) =>
-    val file = Some(new File(datdir, "testWatsonActionCodable.swift").toString())
+    val file = Some(new File(datdir, codWatsonFile).toString())
     assetHelper.withCleaner(wsk.action, "testWatsonActionCodable") { (action, _) =>
       action.create(
         "testWatsonActionCodable",
