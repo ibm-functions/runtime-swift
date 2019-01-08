@@ -26,7 +26,7 @@ let package = Package(
       )
     ],
     dependencies: [
-        .package(url: "https://github.com/watson-developer-cloud/swift-sdk", .exact("0.35.0"))
+        .package(url: "https://github.com/watson-developer-cloud/swift-sdk", .exact("0.38.1"))
     ],
     targets: [
       .target(
