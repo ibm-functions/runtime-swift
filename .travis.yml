@@ -19,7 +19,7 @@ deploy:
       all_branches: true
       repo: ibm-functions/runtime-swift
   - provider: script
-    script: "./tools/travis/publish.sh ibmfunctions 4.1 master"
+    script: "./tools/travis/publish.sh ibmfunctions 4.1 master && ./tools/travis/publish.sh ibmfunctions 4.2 master "
     on:
       branch: master
       repo: ibm-functions/runtime-swift

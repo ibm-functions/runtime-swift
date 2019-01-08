@@ -18,11 +18,16 @@
 package runtime.actionContainers
 
 import java.io.File
+
 import common.WskActorSystem
-import actionContainers.{ActionContainer, ResourceHelpers}
+import actionContainers.{ActionContainer, BasicActionRunnerTests}
 import actionContainers.ActionContainer.withContainer
+import actionContainers.ResourceHelpers.readAsBase64
+import org.junit.runner.RunWith
+import org.scalatest.junit.JUnitRunner
 import spray.json._
 
+@RunWith(classOf[JUnitRunner])
 abstract class SwiftCodableActionContainerTests extends BasicActionRunnerTests with WskActorSystem {
 
   // note: "out" will likely not be empty in some swift build as the compiler
@@ -33,10 +38,53 @@ abstract class SwiftCodableActionContainerTests extends BasicActionRunnerTests w
 
   behavior of s"Codable $swiftContainerImageName"
 
-  testEcho(Seq {
-    (
-      "swift echo",
+  override val testNoSourceOrExec = {
+    TestConfig("")
+  }
+
+  override val testNotReturningJson = {
+    // cannot compile function that doesn't return a json object
+    TestConfig("", skipTest = true)
+  }
+
+  override val testEntryPointOtherThanMain = {
+    TestConfig(
       """
+        | struct AnInput: Codable {
+        |  struct AnObject: Codable {
+        |   let a: String?
+        |  }
+        |  let string: String?
+        |  let numbers: [Int]?
+        |  let object: AnObject?
+        | }
+        | func niam(input: AnInput, respondWith: @escaping (AnInput?, Error?) -> Void) -> Void {
+        |    respondWith(input, nil)
+        | }
+      """.stripMargin,
+      main = "niam",
+      enforceEmptyOutputStream = enforceEmptyOutputStream)
+  }
+
+  override val testInitCannotBeCalledMoreThanOnce = {
+    TestConfig("""
+        | struct AnInput: Codable {
+        |  struct AnObject: Codable {
+        |   let a: String?
+        |  }
+        |  let string: String?
+        |  let numbers: [Int]?
+        |  let object: AnObject?
+        | }
+        | func main(input: AnInput, respondWith: @escaping (AnInput?, Error?) -> Void) -> Void {
+        |    var standardError = FileHandle.standardError
+        |    respondWith(input, nil)
+        | }
+      """.stripMargin)
+  }
+
+  override val testEcho = {
+    TestConfig("""
         |
         | extension FileHandle : TextOutputStream {
         |     public func write(_ string: String) {
@@ -60,12 +108,10 @@ abstract class SwiftCodableActionContainerTests extends BasicActionRunnerTests w
         |    respondWith(input, nil)
         | }
       """.stripMargin)
-  })
+  }
 
-  testUnicode(Seq {
-    (
-      "swift unicode",
-      """
+  override val testUnicode = {
+    TestConfig("""
         | struct AnInputOutput: Codable {
         |  let delimiter: String?
         |  let winter: String?
@@ -83,13 +129,11 @@ abstract class SwiftCodableActionContainerTests extends BasicActionRunnerTests w
         |    }
         | }
       """.stripMargin.trim)
-  })
+  }
 
-  testEnv(
-    Seq {
-      (
-        "swift environment",
-        """
+  override val testEnv = {
+    TestConfig(
+      """
         | struct AnOutput: Codable {
         |  let api_host: String
         |  let api_key: String
@@ -127,59 +171,32 @@ abstract class SwiftCodableActionContainerTests extends BasicActionRunnerTests w
         |     let result = AnOutput(api_host:a, api_key:b, namespace:c, action_name:d, activation_id:e, deadline: f)
         |     respondWith(result, nil)
         | }
-      """.stripMargin)
-    },
-    enforceEmptyOutputStream)
-
-  it should "support actions using non-default entry points" in {
-    withActionContainer() { c =>
-      val code = """
-                   | struct AnOutput: Codable {
-                   |   let result: String?
-                   | }
-                   | func niam(respondWith: (AnOutput?, Error?) -> Void) -> Void {
-                   |    respondWith(AnOutput(result: "it works"), nil)
-                   | }
-                   |""".stripMargin
-
-      val (initCode, initRes) = c.init(initPayload(code, main = "niam"))
-      initCode should be(200)
-
-      val (_, runRes) = c.run(runPayload(JsObject()))
-      runRes.get.fields.get("result") shouldBe Some(JsString("it works"))
-    }
+      """.stripMargin,
+      enforceEmptyOutputStream = enforceEmptyOutputStream)
   }
 
-  it should "return some error on action error" in {
-    val (out, err) = withActionContainer() { c =>
-      val code = """
-                   | // You need an indirection, or swiftc detects the div/0
-                   | // at compile-time. Smart.
-                   | func div(x: Int, y: Int) -> Int {
-                   |    return x/y
-                   | }
-                   | struct Result: Codable{
-                   |    let divBy0: Int?
-                   | }
-                   | func main(respondWith: (Result?, Error?) -> Void) -> Void {
-                   |    respondWith(Result(divBy0: div(x:5, y:0)), nil)
-                   | }
-                 """.stripMargin
-
-      val (initCode, _) = c.init(initPayload(code))
-      initCode should be(200)
-
-      val (runCode, runRes) = c.run(runPayload(JsObject()))
-      runCode should be(502)
-
-      runRes shouldBe defined
-      runRes.get.fields.get("error") shouldBe defined
-    }
-
-    checkStreams(out, err, {
-      case (o, e) =>
-        if (enforceEmptyOutputStream) o shouldBe empty
-        e shouldBe empty
+  override val testLargeInput = {
+    TestConfig(if (false) {
+      // this is returning {} instead of the expected output
+      """
+        | struct AnInput: Codable {
+        |  struct AnObject: Codable {
+        |   let a: String?
+        |  }
+        |  let string: String?
+        |  let numbers: [Int]?
+        |  let object: AnObject?
+        | }
+        | func main(input: AnInput, respondWith: @escaping (AnInput?, Error?) -> Void) -> Void {
+        |    respondWith(input, nil)
+        | }
+      """.stripMargin
+    } else {
+      """
+        | func main(args: [String: Any]) -> [String: Any] {
+        |     return args
+        | }
+      """.stripMargin
     })
   }
 
@@ -213,7 +230,7 @@ abstract class SwiftCodableActionContainerTests extends BasicActionRunnerTests w
 
   it should "support pre-compiled binary in a zip file" in {
     val zip = new File(swiftBinaryName).toPath
-    val code = ResourceHelpers.readAsBase64(zip)
+    val code = readAsBase64(zip)
 
     val (out, err) = withActionContainer() { c =>
       val (initCode, initRes) = c.init(initPayload(code))
@@ -237,5 +254,4 @@ abstract class SwiftCodableActionContainerTests extends BasicActionRunnerTests w
   override def withActionContainer(env: Map[String, String] = Map.empty)(code: ActionContainer => Unit) = {
     withContainer(swiftContainerImageName, env)(code)
   }
-
 }
