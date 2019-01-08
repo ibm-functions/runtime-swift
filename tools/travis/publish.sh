@@ -32,10 +32,10 @@ TERM=dumb ./gradlew \
 -PdockerImageTag=${IMAGE_TAG}
 
   # if doing latest also push a tag with the hash commit
-  if [ ${IMAGE_TAG} == "latest" ]; then
+  if [ ${IMAGE_TAG} == "master" ]; then
   SHORT_COMMIT=`git rev-parse --short HEAD`
   TERM=dumb ./gradlew \
-  :core:${RUNTIME}:distDocker \
+  :${RUNTIME}:distDocker \
   -PdockerRegistry=docker.io \
   -PdockerImagePrefix=${IMAGE_PREFIX} \
   -PdockerImageTag=${SHORT_COMMIT}
