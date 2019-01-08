@@ -1,8 +1,8 @@
 import Dispatch
 import LanguageTranslatorV3
 func main(args: [String:Any]) -> [String:Any] {
-    var resp :[String:Any] = ["translation":"To be translated"]
-    let dispatchGroup = DispatchGroup()
+    var resp :[String:String] = ["translation":"To be translated"]
+    let _whisk_semaphore = DispatchSemaphore(value: 0)
     let username = args["username"] as! String
     let password = args["password"] as! String
     let languageTranslator = LanguageTranslator(username: username, password: password, version: "2018-09-16")
@@ -18,11 +18,11 @@ func main(args: [String:Any]) -> [String:Any] {
             return
         }
         print(translation)
-        resp["translation"] = translation.translations.first?.translationOutput as! String
-        dispatchGroup.leave()
+        resp["translation"] = (translation.translations.first?.translationOutput)!
+        _whisk_semaphore.signal()
 
     }
-    _ = dispatchGroup.wait(timeout: .distantFuture)
+    _ = _whisk_semaphore.wait(timeout: .distantFuture)
     return resp
 
 }
