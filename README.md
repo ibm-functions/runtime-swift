@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/ibm-functions/runtime-swift.svg?branch=master)](https://travis-ci.org/ibm-functions/runtime-swift)
 
 ## Changelogs
+- [Swift 4.2   CHANGELOG.md](swift4.2/CHANGELOG.md)
 - [Swift 4.1   CHANGELOG.md](swift4.1/CHANGELOG.md)
 
 ## Quick Swift Action
@@ -36,9 +37,11 @@ func main(input: Employee, respondWith: (Employee?, Error?) -> Void) -> Void {
 }
 ```
 ```
-wsk action update helloCodableAsync helloCodableAsync.swift swift:4.1
+wsk action update helloCodableAsync helloCodableAsync.swift swift:4.2
+```
 ```
 ok: updated action helloCodableAsync
+```
 ```
 wsk action invoke helloCodableAsync -r -p id 42 -p name Carlos
 ```
@@ -71,9 +74,11 @@ func main(input: Employee, respondWith: (Employee?, Error?) -> Void) -> Void {
 }
 ```
 ```
-wsk action update helloCodableError helloCodableError.swift swift:4.1
+wsk action update helloCodableError helloCodableError.swift swift:4.2
+```
 ```
 ok: updated action helloCodableError
+```
 ```
 wsk action invoke helloCodableError -b -p id 42 -p name Carlos
 ```
@@ -89,15 +94,37 @@ wsk action invoke helloCodableError -b -p id 42 -p name Carlos
 }
 ```
 
-### Packaging an action as a Swift executable using Swift 4
+## Packaging an action as a Swift executable using Swift 4.x
 
 When you create an OpenWhisk Swift action with a Swift source file, it has to be compiled into a binary before the action is run. Once done, subsequent calls to the action are much faster until the container holding your action is purged. This delay is known as the cold-start delay.
 
-To avoid the cold-start delay, you can compile your Swift file into a binary and then upload to OpenWhisk in a zip file. As you need the OpenWhisk scaffolding, the easiest way to create the binary is to build it within the same environment as it will be run in. These are the steps:
+To avoid the cold-start delay, you can compile your Swift file into a binary and then upload to OpenWhisk in a zip file. As you need the OpenWhisk scaffolding, the easiest way to create the binary is to build it within the same environment as it will be run in.
+
+### Compiling Swift 4.2
+
+### Compiling Swift 4.2 single file
+
+Use the docker container and pass the single source file as stdin.
+Pass the name of the method to the flag `-compile`
+```
+docker run -i openwhisk/action-swift-v4.2 -compile main <main.swift >../action.zip
+```
+
+### Compiling Swift 4.2 multiple files with dependencies
+Use the docker container and pass a zip archive containing a `Package.swift` and source files a main source file in the location `Sources/main.swift`.
+```
+zip - -r * | docker run -i openwhisk/action-swift-v4.2 -compile main >../action.zip
+```
+
+For more build examples see [here](./examples/)
+
+
+### Compiling Swift 4.1
+These are the steps:
 
 - Run an interactive Swift action container.
   ```
-  docker run --rm -it -v "$(pwd):/owexec" ibmfunctions/action-swift-v4.1 bash
+  docker run --rm -it -v "$(pwd):/owexec" openwhisk/action-swift-v4.1 bash
   ```
   This puts you in a bash shell within the Docker container.
 
@@ -114,7 +141,7 @@ To avoid the cold-start delay, you can compile your Swift file into a binary and
   Copy any additional source files to `/swift4Action/spm-build/Sources/Action/`
 
 
-- (Optional) Create the `Package.swift` file to add dependencies.
+- Create the `Package.swift` file to add dependencies.
 ```swift
 // swift-tools-version:4.0
 // The swift-tools-version declares the minimum version of Swift required to build this package.
@@ -138,11 +165,11 @@ let package = Package(
         dependencies: ["SwiftyRequest"],
         path: "."
       )
-
+    ]
 ```
   As you can see this example adds `SwiftyRequest` dependencies.
 
-  Notice that now with swift:4.1 is no longer required to include `CCurl`, `Kitura-net` and `SwiftyJSON` in your own `Package.swift`.
+  Notice that now with swift:4.2 is no longer required to include `CCurl`, `Kitura-net` and `SwiftyJSON` in your own `Package.swift`.
   You are free now to use no dependencies, or add the combination that you want with the versions you want.
 
 - Copy Package.swift to spm-build directory
@@ -174,7 +201,7 @@ let package = Package(
 
 - Upload it to OpenWhisk with the action name helloSwifty:
   ```
-  wsk action update helloSwiftly hello.zip ibmfunctions/action-swift-v4.1
+  wsk action update helloSwiftly hello.zip openwhisk/action-swift-v4.2
   ```
 
 - To check how much faster it is, run
@@ -182,61 +209,45 @@ let package = Package(
   wsk action invoke helloSwiftly --blocking
   ```
 
-## Migrating from Swift 3 to Swift 4
 
-### Helper compile.sh helper script
-When compiling and packaging your swift 4 action, there are a couple of differences.
-All your source code needs to be copied to `/swift4Action/spm-build/Sources/Action/` instead of `/swift3Action/spm-build/`
-You Package.swift needs to have the first line with a comment indicating swift4 tooling and format
+### Building the Swift4 Image
 ```
-// swift-tools-version:4.0
+./gradlew swift4.2:distDocker
 ```
-For swift 4 you need specify additional information in Package.swift such as `products` with executable name `Action` and `targets`
-
-You can take a look at the helper script [tools/build/compile.sh](tools/build/compile.sh) to compile and zip your Actions.
-Having a project directory `Hello` under a directory `actions` like the following:
-```
-actions/Hello/Package.swift
-actions/Hello/Sources/main.swift
-```
-Change to the parent directory then run the compile script specify the project directory, the kind `swift:3.1.1` or `swift:4.1` and any swiftc build flags like the following:
-```
-cd actions/
-incubator-runtime-swift/tools/build/compile.sh Hello swift:4.1 -v
-```
-This will produce a zip `build/swift4/Hello.zip`
-
-### SwiftyJSON using single source action file
-If you have a swift:3.1.1 action not compile, just as source using the `SwiftyJSON` package, you need to precompile your action and specify the version of SwiftyJSON you wan to use for swift:4.1 kind action.
-Take into account that starting with Swift 4 there is better support to manage JSON data natively.
-
-Note: This is only applicable to the base image provided for the Swift 4 runtime, other downstream such as IBM Cloud Functions extending this image might provide additional SDK and packages including `SwiftyJSON` and IBM Watson SDK, check the vendor documentation for more specific information about packages and versions.
-
-
-### To use on deployment that contains the rutime as a kind
-To use as a kind action
-```
-wsk action update myAction myAction.swift --kind swift:4.1
-```
-
-### Local development
-
-### Build
-Build all runtime images
-
-```
-./gradlew :swift4.1:distDocker
-```
-This will produce the image `whisk/action-swift-v4.1` and `whisk/action-swift-v4.1`
+This will produce the image `whisk/action-swift-v4.2`
 
 Build and Push image
 ```
 docker login
-./gradlew :swift4.1:distDocker -PdockerImagePrefix=$prefix-user -PdockerRegistry=docker.io
+./gradlew core:swift40Action:distDocker -PdockerImagePrefix=$prefix-user -PdockerRegistry=docker.io
 ```
 
-## Deployment
-Deploy OpenWhisk using ansible environment that contains the kind `swift:4.1`
+### Using Swift 4.2
+To use as a docker action
+```
+wsk action update myAction myAction.swift --docker ibmfunctions/action-swift-v4.2
+```
+This works on any deployment of Apache OpenWhisk
+
+### To use on deployment that contains the rutime as a kind
+To use as a kind action
+```
+wsk action update myAction myAction.swift --kind swift:4.2
+```
+
+## Local development
+```
+./gradlew swift4.2:distDocker
+```
+This will produce the image `whisk/action-swift-v4.2`
+
+Build and Push image
+```
+docker login
+./gradlew core:swift41Action:distDocker -PdockerImagePrefix=$prefix-user -PdockerRegistry=docker.io
+```
+
+Deploy OpenWhisk using ansible environment that contains the kind `swift:4.2`
 Assuming you have OpenWhisk already deploy localy and `OPENWHISK_HOME` pointing to root directory of OpenWhisk core repository.
 
 Set `ROOTDIR` to the root directory of this repository.
@@ -261,7 +272,7 @@ wskdev fresh -t local-swift
 ### Testing
 Install dependencies from the root directory on $OPENWHISK_HOME repository
 ```
-./gradlew :common:scala:install :core:controller:install :core:invoker:install :tests:install
+./gradlew install
 ```
 
 Using gradle to run all tests
@@ -280,15 +291,39 @@ Using IntelliJ:
 #### Using container image to test
 To use as docker action push to your own dockerhub account
 ```
-docker tag whisk/action-swift-v4.1 $user_prefix/action-swift-v4.1
-docker push $user_prefix/action-swift-v4.1
+docker tag whisk/action-swift-v4.2 $user_prefix/action-swift-v4.2
+docker push $user_prefix/action-swift-v4.2
 ```
 Then create the action using your the image from dockerhub
 ```
-wsk action update myAction myAction.swift --docker $user_prefix/action-swift-v4.1
+wsk action update myAction myAction.swift --docker $user_prefix/action-swift-v4.2
 ```
 The `$user_prefix` is usually your dockerhub user id.
 
+## Maintenance Tasks
+
+### Updating Swift 4.2 runtime
+- Check if there is a new version of the [Watson SDK 1.x release](https://github.com/watson-developer-cloud/swift-sdk/releases).
+  - If there is a new version for 1.x update the [swift4.2/Package.swift](./swift4.2/Package.swift)
+- Check if there is a new dockerhub image from upstream [openwhisk/action-swift-v4.2](https://hub.docker.com/r/openwhisk/action-swift-v4.2/tags)
+  - If there is a new tag update the [swift4.2/Dockerfile](./swift4.2/Dockerfile)
+### Updating Swift 4.1 runtime
+- Check if there is a new version of the [Watson SDK 0.x release](https://github.com/watson-developer-cloud/swift-sdk/releases).
+  - If there is a new version for 0.x update the [swift4.1/Package.swift](./swift4.1/Package.swift)
+- Check if there is a new dockerhub image from upstream [openwhisk/action-swift-v4.1](https://hub.docker.com/r/openwhisk/action-swift-v4.1/tags)
+  - If there is a new tag update the [swift4.1/Dockerfile](./swift4.1/Dockerfile)
+### Pushing new versions for runtimes
+- After the PR is merged and the master pass Travis CI, checkout master.
+- Create tag for each runtime and push upstream
+```
+git tag 4.2@<new version>
+git push upstream 4.2@<new version>
+```
+- After the image is deployed to production update the `latest` tag for each runtime.
+```
+git tag 4.2@latest -f
+git push upstream 4.2@latest -f
+```
 
 
 # License
