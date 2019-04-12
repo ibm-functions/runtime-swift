@@ -1,4 +1,4 @@
-// swift-tools-version:4.0
+// swift-tools-version:4.2
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 /*
@@ -26,7 +26,7 @@ let package = Package(
       )
     ],
     dependencies: [
-        .package(url: "https://github.com/watson-developer-cloud/swift-sdk", .exact("0.38.1"))
+        .package(url: "https://github.com/watson-developer-cloud/swift-sdk", .exact("1.3.1"))
     ],
     targets: [
       .target(
@@ -34,7 +34,6 @@ let package = Package(
         dependencies: [
           "AssistantV1",
           "AssistantV2",
-          "ConversationV1",
           "DiscoveryV1",
           "LanguageTranslatorV3",
           "NaturalLanguageClassifierV1",
@@ -42,7 +41,8 @@ let package = Package(
           "PersonalityInsightsV3",
           "ToneAnalyzerV3",
           "VisualRecognitionV3"
-          ]
+          ],
+        path: "."
       )
     ]
 )

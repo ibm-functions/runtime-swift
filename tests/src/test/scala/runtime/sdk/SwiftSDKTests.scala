@@ -17,19 +17,22 @@
 
 package runtime.sdk
 
-import common.rest.WskRestOperations
-import common.{TestHelpers, WhiskProperties, WskActorSystem, WskProps, WskTestHelpers}
 import java.io.File
+
 import scala.concurrent.duration.DurationInt
 import scala.language.postfixOps
-import org.scalatest.Matchers
+import common._
+import org.junit.runner.RunWith
+import org.scalatest.junit.JUnitRunner
 import spray.json._
+import org.apache.openwhisk.core.entity.WhiskAction.provideApiKeyAnnotationName
 import spray.json.DefaultJsonProtocol.StringJsonFormat
 
-abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with Matchers with WskActorSystem {
+@RunWith(classOf[JUnitRunner])
+abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with WskActorSystem {
 
   implicit val wskprops = WskProps()
-  val wsk = new WskRestOperations
+  val wsk = new Wsk
   val activationPollDuration = 2.minutes
   lazy val actionKind = "swift:3.1.1"
   lazy val lang = actionKind.split(":")(0)
@@ -49,7 +52,11 @@ abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with Matche
 
     val actionName = "invokeAction"
     assetHelper.withCleaner(wsk.action, actionName) { (action, _) =>
-      action.create(name = actionName, artifact = file, kind = Some(actionKind))
+      action.create(
+        name = actionName,
+        artifact = file,
+        kind = Some(actionKind),
+        annotations = Map(provideApiKeyAnnotationName -> JsTrue))
     }
     // invoke the action
     var params = Map("dummy" -> JsString("dummy"))
@@ -65,8 +72,8 @@ abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with Matche
       activation.response.result.get.fields("activationId").toString.length should be >= 32
 
       // check for "date" field that comes from invoking the date action
-      whisk.utils.JsHelpers.fieldPathExists(activation.response.result.get, "response", "result", "date") should be(
-        true)
+      org.apache.openwhisk.utils.JsHelpers
+        .fieldPathExists(activation.response.result.get, "response", "result", "date") should be(true)
     }
   }
 
@@ -76,7 +83,11 @@ abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with Matche
       val file = Some(new File(actionTypeDir, "invokeNonBlocking.swift").toString())
       val actionName = "invokeNonBlockingAction"
       assetHelper.withCleaner(wsk.action, actionName) { (action, _) =>
-        action.create(name = actionName, file, kind = Some(actionKind))
+        action.create(
+          name = actionName,
+          file,
+          kind = Some(actionKind),
+          annotations = Map(provideApiKeyAnnotationName -> JsTrue))
       }
 
       // invoke the action
@@ -87,7 +98,7 @@ abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with Matche
       val run = wsk.action.invoke(actionName, params)
       withActivation(wsk.activation, run, initialWait = 5 seconds, totalWait = activationPollDuration) { activation =>
         // should not have a "response"
-        whisk.utils.JsHelpers.fieldPathExists(activation.response.result.get, "response") shouldBe false
+        org.apache.openwhisk.utils.JsHelpers.fieldPathExists(activation.response.result.get, "response") shouldBe false
 
         // should have a field named "activationId" which is the date action's activationId
         activation.response.result.get.fields("activationId").toString.length should be >= 32
@@ -117,7 +128,11 @@ abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with Matche
     val file = Some(new File(actionTypeDir, "trigger.swift").toString())
     val actionName = "ActionThatTriggers"
     assetHelper.withCleaner(wsk.action, actionName) { (action, _) =>
-      action.create(name = actionName, file, kind = Some(actionKind))
+      action.create(
+        name = actionName,
+        file,
+        kind = Some(actionKind),
+        annotations = Map(provideApiKeyAnnotationName -> JsTrue))
     }
 
     // invoke the action
@@ -152,7 +167,11 @@ abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with Matche
     assetHelper.withCleaner(wsk.action, actionName) { (action, _) =>
       assetHelper.withCleaner(wsk.trigger, triggerName) { (_, _) =>
         // using an asset cleaner on the created trigger name will clean it up at the conclusion of the test
-        action.create(name = actionName, file, kind = Some(actionKind))
+        action.create(
+          name = actionName,
+          file,
+          kind = Some(actionKind),
+          annotations = Map(provideApiKeyAnnotationName -> JsTrue))
       }
     }
 
@@ -179,7 +198,7 @@ abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with Matche
     // create a dummy action and trigger for the rule
     assetHelper.withCleaner(wsk.action, ruleActionName) { (action, name) =>
       val dummyFile = Some(new File(actionTypeDir, "hello.swift").toString())
-      action.create(name, dummyFile, kind = Some(actionKind))
+      action.create(name, dummyFile, kind = Some(actionKind), annotations = Map(provideApiKeyAnnotationName -> JsTrue))
     }
 
     assetHelper.withCleaner(wsk.trigger, ruleTriggerName) { (trigger, name) =>
@@ -192,7 +211,11 @@ abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with Matche
     // create an action that creates the rule
     val createRuleFile = Some(new File(actionTypeDir, "createRule.swift").toString())
     assetHelper.withCleaner(wsk.action, "ActionThatCreatesRule") { (action, name) =>
-      action.create(name, createRuleFile, kind = Some(actionKind))
+      action.create(
+        name,
+        createRuleFile,
+        kind = Some(actionKind),
+        annotations = Map(provideApiKeyAnnotationName -> JsTrue))
     }
 
     // invoke the create rule action
