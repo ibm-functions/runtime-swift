@@ -25,7 +25,7 @@ import common._
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 import spray.json._
-import org.apache.openwhisk.core.entity.WhiskAction.provideApiKeyAnnotationName
+import org.apache.openwhisk.core.entity.Annotations
 import spray.json.DefaultJsonProtocol.StringJsonFormat
 
 @RunWith(classOf[JUnitRunner])
@@ -56,7 +56,7 @@ abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with WskAct
         name = actionName,
         artifact = file,
         kind = Some(actionKind),
-        annotations = Map(provideApiKeyAnnotationName -> JsTrue))
+        annotations = Map(Annotations.ProvideApiKeyAnnotationName -> JsTrue))
     }
     // invoke the action
     var params = Map("dummy" -> JsString("dummy"))
@@ -87,7 +87,7 @@ abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with WskAct
           name = actionName,
           file,
           kind = Some(actionKind),
-          annotations = Map(provideApiKeyAnnotationName -> JsTrue))
+          annotations = Map(Annotations.ProvideApiKeyAnnotationName -> JsTrue))
       }
 
       // invoke the action
@@ -132,7 +132,7 @@ abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with WskAct
         name = actionName,
         file,
         kind = Some(actionKind),
-        annotations = Map(provideApiKeyAnnotationName -> JsTrue))
+        annotations = Map(Annotations.ProvideApiKeyAnnotationName -> JsTrue))
     }
 
     // invoke the action
@@ -171,7 +171,7 @@ abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with WskAct
           name = actionName,
           file,
           kind = Some(actionKind),
-          annotations = Map(provideApiKeyAnnotationName -> JsTrue))
+          annotations = Map(Annotations.ProvideApiKeyAnnotationName -> JsTrue))
       }
     }
 
@@ -198,7 +198,7 @@ abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with WskAct
     // create a dummy action and trigger for the rule
     assetHelper.withCleaner(wsk.action, ruleActionName) { (action, name) =>
       val dummyFile = Some(new File(actionTypeDir, "hello.swift").toString())
-      action.create(name, dummyFile, kind = Some(actionKind), annotations = Map(provideApiKeyAnnotationName -> JsTrue))
+      action.create(name, dummyFile, kind = Some(actionKind), annotations = Map(Annotations.ProvideApiKeyAnnotationName -> JsTrue))
     }
 
     assetHelper.withCleaner(wsk.trigger, ruleTriggerName) { (trigger, name) =>
@@ -215,7 +215,7 @@ abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with WskAct
         name,
         createRuleFile,
         kind = Some(actionKind),
-        annotations = Map(provideApiKeyAnnotationName -> JsTrue))
+        annotations = Map(Annotations.ProvideApiKeyAnnotationName -> JsTrue))
     }
 
     // invoke the create rule action
