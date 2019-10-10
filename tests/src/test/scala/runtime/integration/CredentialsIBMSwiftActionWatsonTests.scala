@@ -20,7 +20,8 @@ package runtime.integration
 import java.io.File
 
 import common.rest.WskRestOperations
-import common.{TestHelpers, TestUtils, WskActorSystem, WskProps, WskTestHelpers}
+import common.{TestHelpers, WhiskProperties, WskActorSystem, WskProps, WskTestHelpers}
+import scala.io.Source
 import spray.json._
 
 abstract class CredentialsIBMSwiftActionWatsonTests extends TestHelpers with WskTestHelpers with WskActorSystem {
@@ -32,7 +33,15 @@ abstract class CredentialsIBMSwiftActionWatsonTests extends TestHelpers with Wsk
   lazy val dictWatsonFile = "testWatsonAction.swift"
   lazy val codWatsonFile = "testWatsonActionCodable.swift"
 
-  var creds = TestUtils.getVCAPcredentials("language_translator")
+  // read credentials from from vcap_services.json
+  val vcapFile = WhiskProperties.getProperty("vcap.services.file")
+  val vcapString = Source.fromFile(vcapFile).getLines.mkString
+  val vcapInfo =
+    JsonParser(ParserInput(vcapString)).asJsObject.fields("language_translator").asInstanceOf[JsArray].elements(0)
+  val creds = vcapInfo.asJsObject.fields("credentials").asJsObject
+  val url = creds.fields("url").asInstanceOf[JsString]
+  val username = creds.fields("username").asInstanceOf[JsString]
+  val password = creds.fields("password").asInstanceOf[JsString]
 
   /*
     Uses Watson Translation Service to translate the word "Hello" in English, to "Hola" in Spanish.
@@ -47,10 +56,7 @@ abstract class CredentialsIBMSwiftActionWatsonTests extends TestHelpers with Wsk
         file,
         main = Some("main"),
         kind = Some(actionKind),
-        parameters = Map(
-          "url" -> JsString(creds.get("url")),
-          "username" -> JsString(creds.get("username")),
-          "password" -> JsString(creds.get("password"))))
+        parameters = Map("url" -> url, "username" -> username, "password" -> password))
     }
 
     withActivation(wsk.activation, wsk.action.invoke("testWatsonAction")) { activation =>
@@ -70,10 +76,7 @@ abstract class CredentialsIBMSwiftActionWatsonTests extends TestHelpers with Wsk
         file,
         main = Some("main"),
         kind = Some(actionKind),
-        parameters = Map(
-          "url" -> JsString(creds.get("url")),
-          "username" -> JsString(creds.get("username")),
-          "password" -> JsString(creds.get("password"))))
+        parameters = Map("url" -> url, "username" -> username, "password" -> password))
     }
 
     withActivation(wsk.activation, wsk.action.invoke("testWatsonActionCodable")) { activation =>
