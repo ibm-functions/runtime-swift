@@ -173,7 +173,7 @@ abstract class SwiftCodableActionContainerTests extends BasicActionRunnerTests w
         |     if let v : String = env["__OW_DEADLINE"] {
         |         g = "\(v)"
         |     }
-        |     let result = AnOutput(api_host:a, api_key:b, namespace:c, action_name:d, action_version:e activation_id:f, deadline: g)
+        |     let result = AnOutput(api_host:a, api_key:b, namespace:c, action_name:d, action_version:e, activation_id:f, deadline: g)
         |     respondWith(result, nil)
         | }
       """.stripMargin,
