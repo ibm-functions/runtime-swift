@@ -112,6 +112,7 @@ abstract class SwiftActionContainerTests extends BasicActionRunnerTests with Wsk
         |     var d = "???"
         |     var e = "???"
         |     var f = "???"
+        |     var g = "???"
         |     if let v : String = env["__OW_API_HOST"] {
         |         a = "\(v)"
         |     }
@@ -124,13 +125,16 @@ abstract class SwiftActionContainerTests extends BasicActionRunnerTests with Wsk
         |     if let v : String = env["__OW_ACTION_NAME"] {
         |         d = "\(v)"
         |     }
-        |     if let v : String = env["__OW_ACTIVATION_ID"] {
+        |     if let v : String = env["__OW_ACTION_VERSION"] {
         |         e = "\(v)"
         |     }
-        |     if let v : String = env["__OW_DEADLINE"] {
+        |     if let v : String = env["__OW_ACTIVATION_ID"] {
         |         f = "\(v)"
         |     }
-        |     return ["api_host": a, "api_key": b, "namespace": c, "action_name": d, "activation_id": e, "deadline": f]
+        |     if let v : String = env["__OW_DEADLINE"] {
+        |         g = "\(v)"
+        |     }
+        |     return ["api_host": a, "api_key": b, "namespace": c, "action_name": d, "action_version": e, "activation_id": f, "deadline": g]
         | }
       """.stripMargin,
       enforceEmptyOutputStream = enforceEmptyOutputStream)
