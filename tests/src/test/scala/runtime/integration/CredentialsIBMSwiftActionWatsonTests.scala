@@ -40,8 +40,7 @@ abstract class CredentialsIBMSwiftActionWatsonTests extends TestHelpers with Wsk
     JsonParser(ParserInput(vcapString)).asJsObject.fields("language_translator").asInstanceOf[JsArray].elements(0)
   val creds = vcapInfo.asJsObject.fields("credentials").asJsObject
   val url = creds.fields("url").asInstanceOf[JsString]
-  val username = creds.fields("username").asInstanceOf[JsString]
-  val password = creds.fields("password").asInstanceOf[JsString]
+  val apikey = creds.fields("apikey").asInstanceOf[JsString]
 
   /*
     Uses Watson Translation Service to translate the word "Hello" in English, to "Hola" in Spanish.
@@ -56,7 +55,7 @@ abstract class CredentialsIBMSwiftActionWatsonTests extends TestHelpers with Wsk
         file,
         main = Some("main"),
         kind = Some(actionKind),
-        parameters = Map("url" -> url, "username" -> username, "password" -> password))
+        parameters = Map("url" -> url, "username" -> JsString("APIKey"), "password" -> apikey))
     }
 
     withActivation(wsk.activation, wsk.action.invoke("testWatsonAction")) { activation =>
@@ -76,7 +75,7 @@ abstract class CredentialsIBMSwiftActionWatsonTests extends TestHelpers with Wsk
         file,
         main = Some("main"),
         kind = Some(actionKind),
-        parameters = Map("url" -> url, "username" -> username, "password" -> password))
+        parameters = Map("url" -> url, "username" -> JsString("APIKey"), "password" -> apikey))
     }
 
     withActivation(wsk.activation, wsk.action.invoke("testWatsonActionCodable")) { activation =>
