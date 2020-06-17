@@ -8,7 +8,7 @@ func main(args: [String:Any]) -> [String:Any] {
     let languageTranslator = LanguageTranslator(username: username, password: password, version: "2018-09-16")
 
 
-    languageTranslator.translate(text: ["Hello"], source: "en", target: "es") { (response, error) in
+    languageTranslator.translate(text: ["Hello"], source: "en", target: "it" ) { (response, error) in
         if let error = error {
             print(error)
             return

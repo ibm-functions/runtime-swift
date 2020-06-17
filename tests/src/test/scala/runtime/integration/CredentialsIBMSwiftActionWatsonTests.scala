@@ -61,7 +61,7 @@ abstract class CredentialsIBMSwiftActionWatsonTests extends TestHelpers with Wsk
     withActivation(wsk.activation, wsk.action.invoke("testWatsonAction")) { activation =>
       val response = activation.response
       response.result.get.fields.get("error") shouldBe empty
-      response.result.get.fields("translation") shouldBe JsString("hola")
+      response.result.get.fields("translation") shouldBe JsString("Ciao")
     }
 
   }
@@ -81,7 +81,7 @@ abstract class CredentialsIBMSwiftActionWatsonTests extends TestHelpers with Wsk
     withActivation(wsk.activation, wsk.action.invoke("testWatsonActionCodable")) { activation =>
       val response = activation.response
       response.result.get.fields.get("error") shouldBe empty
-      response.result.get.fields("translation") shouldBe JsString("hola")
+      response.result.get.fields("translation") shouldBe JsString("Ciao")
     }
 
   }
