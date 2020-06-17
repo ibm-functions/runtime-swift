@@ -13,7 +13,7 @@ struct Output: Codable {
 }
 func main(param: Input, completion: @escaping (Output?, Error?) -> Void) -> Void {
     let languageTranslator = LanguageTranslator(username: param.username , password: param.password, version: "2018-09-16")
-    languageTranslator.translate(text: ["Hello"], source: "en", target: "es") { (response, error) in
+    languageTranslator.translate(text: ["Hello"], source: "en", target: "it") { (response, error) in
         if let error = error {
             print(error)
             return
