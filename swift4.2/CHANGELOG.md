@@ -1,5 +1,17 @@
 # IBM Functions Swift 4.2 Runtime
 
+## 1.4.0
+Changes:
+  - Update to a newer parent image.
+  - Include bug and security fixes.
+  - The action proxy is now build with go 1.15 (was 1.12 before).
+
+Swift runtime version: [swift-4.2.4-RELEASE](https://swift.org/builds/swift-4.2.4-release/ubuntu1604/swift-4.2.4-RELEASE/swift-4.2.4-RELEASE-ubuntu16.04.tar.gz)
+
+Packages included:
+  - [Watson SDK 1.3.1](https://github.com/watson-developer-cloud/swift-sdk/releases/tag/1.3.1)
+
+
 ## 1.3.0
 Changes:
   - Update to a newer base image.
