@@ -30,6 +30,10 @@ task testBlueCI(type: Test) {
 task testBlueDeployment(type: Test) {
     include 'runtime/integration/**'
     include 'runtime/system/**'
+
+    // Exclude the swift:4.1 tests as it is deprecated for the blueDeployment.
+    // Once swift:4.1 is fully removed from this repo, the exclude can also be removed.
+    exclude '**/*Swift41*'
 }
 
 task testSDK(type: Test) {
