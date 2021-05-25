@@ -1,5 +1,15 @@
 # IBM Functions Swift 4.2 Runtime
 
+## 1.4.1
+Changes:
+  - Add `--with-new-pkgs` to `apt-get upgrade` to also install security updates for packages that include new libraries.
+
+Swift runtime version: [swift-4.2.4-RELEASE](https://swift.org/builds/swift-4.2.4-release/ubuntu1604/swift-4.2.4-RELEASE/swift-4.2.4-RELEASE-ubuntu16.04.tar.gz)
+
+Packages included:
+  - [Watson SDK 1.3.1](https://github.com/watson-developer-cloud/swift-sdk/releases/tag/1.3.1)
+
+
 ## 1.4.0
 Changes:
   - Update to a newer parent image.
