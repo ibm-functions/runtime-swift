@@ -6,7 +6,7 @@ COPY _Whisk.swift /swiftAction/Sources/
 COPY Package.swift /swiftAction/
 RUN apt-get update \
     # Update installed packages to get security fixes if available.
-    && apt-get upgrade -y --no-install-recommends \
+    && apt-get upgrade -y --no-install-recommends --with-new-pkgs\
     # Cleanup apt data, we do not need them later on.
     && rm -rf /var/lib/apt/lists/* \
     && swift build -c release \
