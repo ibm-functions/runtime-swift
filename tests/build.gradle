@@ -20,11 +20,19 @@ tasks.withType(Test) {
 
 task testWithoutCredentials(type: Test) {
     exclude '**/*Credentials*'
+    
+    // Exclude the swift:4.1 tests as it is deprecated for the blueDeployment.
+    // Once swift:4.1 is fully removed from this repo, the exclude can also be removed.
+    exclude '**/*Swift41*'
 }
 
 // intended for mainBlueWhisk pipeline
 task testBlueCI(type: Test) {
     exclude 'runtime/sdk/**'
+
+    // Exclude the swift:4.1 tests as it is deprecated for the blueDeployment.
+    // Once swift:4.1 is fully removed from this repo, the exclude can also be removed.
+    exclude '**/*Swift41*'
 }
 
 task testBlueDeployment(type: Test) {
@@ -38,10 +46,18 @@ task testBlueDeployment(type: Test) {
 
 task testSDK(type: Test) {
     include 'runtime/sdk/**'
+
+    // Exclude the swift:4.1 tests as it is deprecated for the blueDeployment.
+    // Once swift:4.1 is fully removed from this repo, the exclude can also be removed.
+    exclude '**/*Swift41*'
 }
 
 task testWithoutSDK(type: Test) {
     exclude 'runtime/sdk/**'
+  
+    // Exclude the swift:4.1 tests as it is deprecated for the blueDeployment.
+    // Once swift:4.1 is fully removed from this repo, the exclude can also be removed.
+    exclude '**/*Swift41*'
 }
 
 dependencies {

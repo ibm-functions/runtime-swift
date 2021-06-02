@@ -6,13 +6,14 @@ import LanguageTranslatorV3
 struct Input: Codable {
     let username: String
     let password: String
-    let url: String?
+    let url: String
 }
 struct Output: Codable {
     let translation: String
 }
 func main(param: Input, completion: @escaping (Output?, Error?) -> Void) -> Void {
     let languageTranslator = LanguageTranslator(username: param.username , password: param.password, version: "2018-09-16")
+    languageTranslator.serviceURL = param.url 
     languageTranslator.translate(text: ["Hello"], source: "en", target: "it") { (response, error) in
         if let error = error {
             print(error)
