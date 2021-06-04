@@ -7,6 +7,12 @@ repositories {
     mavenLocal()
 }
 
+test {
+    // Exclude the swift:4.1 tests as it is deprecated.
+    // Once swift:4.1 is fully removed from this repo, the exclude can also be removed.
+    exclude '**/*Swift41*'
+}
+
 tasks.withType(Test) {
     systemProperties = System.getProperties() // Forward defined properties to the test JVM
     testLogging {
@@ -17,11 +23,10 @@ tasks.withType(Test) {
     outputs.upToDateWhen { false } // force tests to run every time
 }
 
-
 task testWithoutCredentials(type: Test) {
     exclude '**/*Credentials*'
     
-    // Exclude the swift:4.1 tests as it is deprecated for the blueDeployment.
+    // Exclude the swift:4.1 tests as it is deprecated.
     // Once swift:4.1 is fully removed from this repo, the exclude can also be removed.
     exclude '**/*Swift41*'
 }
@@ -30,7 +35,7 @@ task testWithoutCredentials(type: Test) {
 task testBlueCI(type: Test) {
     exclude 'runtime/sdk/**'
 
-    // Exclude the swift:4.1 tests as it is deprecated for the blueDeployment.
+    // Exclude the swift:4.1 tests as it is deprecated.
     // Once swift:4.1 is fully removed from this repo, the exclude can also be removed.
     exclude '**/*Swift41*'
 }
@@ -39,7 +44,7 @@ task testBlueDeployment(type: Test) {
     include 'runtime/integration/**'
     include 'runtime/system/**'
 
-    // Exclude the swift:4.1 tests as it is deprecated for the blueDeployment.
+    // Exclude the swift:4.1 tests as it is deprecated.
     // Once swift:4.1 is fully removed from this repo, the exclude can also be removed.
     exclude '**/*Swift41*'
 }
@@ -55,7 +60,7 @@ task testSDK(type: Test) {
 task testWithoutSDK(type: Test) {
     exclude 'runtime/sdk/**'
   
-    // Exclude the swift:4.1 tests as it is deprecated for the blueDeployment.
+    // Exclude the swift:4.1 tests as it is deprecated.
     // Once swift:4.1 is fully removed from this repo, the exclude can also be removed.
     exclude '**/*Swift41*'
 }
