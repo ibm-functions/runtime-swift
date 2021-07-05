@@ -18,6 +18,8 @@ if [ ${RUNTIME_VERSION} == "4.1" ]; then
   RUNTIME="swift4.1"
 elif [ ${RUNTIME_VERSION} == "4.2" ]; then
   RUNTIME="swift4.2"
+elif [ ${RUNTIME_VERSION} == "5.4" ]; then
+  RUNTIME="swift5.4"
 fi
 
 if [[ ! -z ${DOCKER_USER} ]] && [[ ! -z ${DOCKER_PASSWORD} ]]; then

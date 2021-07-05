@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/ibm-functions/runtime-swift.svg?branch=master)](https://travis-ci.org/ibm-functions/runtime-swift)
 
 ## Changelogs
+- [Swift 5.4   CHANGELOG.md](swift5.4/CHANGELOG.md)
 - [Swift 4.2   CHANGELOG.md](swift4.2/CHANGELOG.md)
 - [Swift 4.1   CHANGELOG.md](swift4.1/CHANGELOG.md)
 

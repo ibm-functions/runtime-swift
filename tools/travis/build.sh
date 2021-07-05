@@ -39,4 +39,5 @@ docker version
 cd $ROOTDIR
 TERM=dumb ./gradlew \
 :swift4.2:distDocker \
+:swift5.4:distDocker \
 -PdockerImagePrefix=${IMAGE_PREFIX}
