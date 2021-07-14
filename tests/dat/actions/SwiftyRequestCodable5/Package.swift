@@ -26,9 +26,24 @@ let package = Package(
         targets:  ["Action"]
       )
     ],
+    dependencies: [
+//      .package(url: "https://github.com/IBM-Swift/SwiftyRequest.git", .upToNextMajor(from: "1.0.0")),
+      .package(url: "https://github.com/watson-developer-cloud/swift-sdk", .exact("4.2.1"))
+    ],
     targets: [
       .target(
         name: "Action",
+        dependencies: [
+          "AssistantV2",
+          "ConversationV1",
+          "DiscoveryV1",
+          "LanguageTranslatorV3",
+          "NaturalLanguageClassifierV1",
+          "NaturalLanguageUnderstandingV1",
+          "PersonalityInsightsV3",
+          "ToneAnalyzerV3",
+          "VisualRecognitionV3"
+          ],
         path: "."
       )
     ]

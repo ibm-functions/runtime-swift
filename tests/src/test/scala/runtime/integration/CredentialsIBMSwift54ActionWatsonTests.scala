@@ -24,7 +24,8 @@ import org.scalatest.junit.JUnitRunner
 class CredentialsIBMSwift54ActionWatsonTests extends CredentialsIBMSwiftActionWatsonTests {
 
   override lazy val actionKind = "swift:5.4"
-  override lazy val dictWatsonFile = "testWatsonActionSDK1.swift"
-  override lazy val codWatsonFile = "testWatsonActionCodableSDK1.swift"
+  // swift:5.4 runtime uses ibm-watson sdk 4.x, use related actions for test
+  override lazy val dictWatsonFile = "testWatsonActionSDK4.swift"
+  override lazy val codWatsonFile = "testWatsonActionCodableSDK4.swift"
 
 }
