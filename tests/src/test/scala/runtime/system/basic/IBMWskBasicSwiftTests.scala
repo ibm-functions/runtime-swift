@@ -29,7 +29,7 @@ abstract class IBMWskBasicSwiftTests extends TestHelpers with WskTestHelpers wit
   implicit val wskprops = WskProps()
   val wsk = new WskRestOperations
   lazy val actionKind = "swift:4.0"
-  val activationPollDuration = 2.minutes
+  val activationPollDuration = 5.minutes
 
   behavior of s"Runtime $actionKind"
 
@@ -38,7 +38,7 @@ abstract class IBMWskBasicSwiftTests extends TestHelpers with WskTestHelpers wit
 
     val name = "helloSwift"
     assetHelper.withCleaner(wsk.action, name) { (action, _) =>
-      action.create(name = name, artifact = file, kind = Some(actionKind))
+      action.create(name = name, artifact = file, timeout = Some(4.minutes), kind = Some(actionKind))
     }
 
     withActivation(wsk.activation, wsk.action.invoke(name), initialWait = 5 seconds, totalWait = activationPollDuration) {
@@ -65,7 +65,12 @@ abstract class IBMWskBasicSwiftTests extends TestHelpers with WskTestHelpers wit
 
       val name = "niamSwiftAction"
       assetHelper.withCleaner(wsk.action, name) { (action, _) =>
-        action.create(name = name, artifact = file, main = Some("niam"), kind = Some(actionKind))
+        action.create(
+          name = name,
+          artifact = file,
+          timeout = Some(4.minutes),
+          main = Some("niam"),
+          kind = Some(actionKind))
       }
 
       withActivation(
