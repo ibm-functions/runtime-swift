@@ -21,6 +21,7 @@ import java.io.File
 
 import common.rest.WskRestOperations
 import common.{TestHelpers, WhiskProperties, WskActorSystem, WskProps, WskTestHelpers}
+import scala.concurrent.duration.DurationInt
 import scala.io.Source
 import spray.json._
 
@@ -41,6 +42,7 @@ abstract class CredentialsIBMSwiftActionWatsonTests extends TestHelpers with Wsk
   val creds = vcapInfo.asJsObject.fields("credentials").asJsObject
   val url = creds.fields("url").asInstanceOf[JsString]
   val apikey = creds.fields("apikey").asInstanceOf[JsString]
+  val activationPollDuration = 5.minutes
 
   /*
     Uses Watson Translation Service to translate the word "Hello" in English, to "Hola" in Spanish.
@@ -53,12 +55,17 @@ abstract class CredentialsIBMSwiftActionWatsonTests extends TestHelpers with Wsk
       action.create(
         "testWatsonAction",
         file,
+        timeout = Some(4.minutes),
         main = Some("main"),
         kind = Some(actionKind),
         parameters = Map("url" -> url, "username" -> JsString("APIKey"), "password" -> apikey))
     }
 
-    withActivation(wsk.activation, wsk.action.invoke("testWatsonAction")) { activation =>
+    withActivation(
+      wsk.activation,
+      wsk.action.invoke("testWatsonAction"),
+      initialWait = 5.seconds,
+      totalWait = activationPollDuration) { activation =>
       val response = activation.response
       response.result.get.fields.get("error") shouldBe empty
       response.result.get.fields("translation") shouldBe JsString("Ciao")
@@ -73,12 +80,17 @@ abstract class CredentialsIBMSwiftActionWatsonTests extends TestHelpers with Wsk
       action.create(
         "testWatsonActionCodable",
         file,
+        timeout = Some(4.minutes),
         main = Some("main"),
         kind = Some(actionKind),
         parameters = Map("url" -> url, "username" -> JsString("APIKey"), "password" -> apikey))
     }
 
-    withActivation(wsk.activation, wsk.action.invoke("testWatsonActionCodable")) { activation =>
+    withActivation(
+      wsk.activation,
+      wsk.action.invoke("testWatsonActionCodable"),
+      initialWait = 5.seconds,
+      totalWait = activationPollDuration) { activation =>
       val response = activation.response
       response.result.get.fields.get("error") shouldBe empty
       response.result.get.fields("translation") shouldBe JsString("Ciao")
