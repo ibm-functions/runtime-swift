@@ -1,5 +1,5 @@
 # Dockerfile extends Apache OpenWhisk Swift image https://github.com/apache/openwhisk-runtime-swift/blob/master/core/swift42Action/Dockerfile
-FROM openwhisk/action-swift-v4.2:546c7ee
+FROM openwhisk/action-swift-v4.2:8370314
 
 # Add Pre-Installed Packages for IBM
 COPY _Whisk.swift /swiftAction/Sources/
