@@ -57,20 +57,33 @@ func main(args: [String:Any]) -> [String:Any] {
 func main2(args: [String:Any]) -> [String:Any] {
     var resp :[String:Any] = ["translation":"To be translated"]
     let dispatchGroup = DispatchGroup()
-    let username = args["username"] as! String
+
+    let username = args["url"] as! String
     let password = args["password"] as! String
-    let languageTranslator = LanguageTranslator(username: username, password: password)
-    let request = TranslateRequest(text: ["Hello"], source: "en", target: "es")
 
-    let failure = { (error: Error) in print(error) }
-    dispatchGroup.enter()
-
-    languageTranslator.translate(request: request, failure: failure) {translation in
-        print(translation)
-        resp["translation"] = translation.translations.first?.translationOutput as! String
-        dispatchGroup.leave()
+    let authenticator = WatsonIAMAuthenticator(apiKey: password)
+    guard let languageTranslator = try? LanguageTranslator(version: "2018-09-16", authenticator: authenticator) else {
+        print("error: Could not create languageTranslator!")
+        return
     }
-    _ = dispatchGroup.wait(timeout: .distantFuture)
+
+    languageTranslator.serviceURL = url 
+    languageTranslator.translate(text: ["Hello"], source: "en", target: "es") { (response, error) in
+        if let error = error {
+            print(error)
+            return
+        }
+        guard let translation = response?.result else {
+            print("missing response")
+            return
+        }
+        print(translation)
+        let result = Output(translation: (translation.translations.first?.translation)!)
+        print(result)
+        resp["translation"]= result
+        completion(result, nil)
+    }
+    
     return resp
 }
 
