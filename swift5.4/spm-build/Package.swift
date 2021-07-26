@@ -1,4 +1,4 @@
-// swift-tools-version:4.2
+// swift-tools-version:5.3
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 /*
@@ -19,29 +19,25 @@ import PackageDescription
 
 let package = Package(
     name: "Action",
-    products: [
-      .executable(
-        name: "Action",
-        targets:  ["Action"]
-      )
-    ],
     dependencies: [
-        .package(url: "https://github.com/watson-developer-cloud/swift-sdk", .exact("4.2.1"))
+        // .package(url: "https://github.com/watson-developer-cloud/swift-sdk", .exact("4.2.1"))
+        .package(name: "WatsonDeveloperCloud", url: "https://github.com/watson-developer-cloud/swift-sdk", .exact("4.2.1"))
     ],
     targets: [
       .target(
         name: "Action",
         dependencies: [
-          "AssistantV1",
-          "AssistantV2",
-          "DiscoveryV1",
-          "LanguageTranslatorV3",
-          "NaturalLanguageClassifierV1",
-          "NaturalLanguageUnderstandingV1",
-          "PersonalityInsightsV3",
-          "ToneAnalyzerV3",
-          "VisualRecognitionV3"
-          ]
+          .product(name: "AssistantV1", package: "WatsonDeveloperCloud"),
+          .product(name: "AssistantV2", package: "WatsonDeveloperCloud"),
+          .product(name: "DiscoveryV1", package: "WatsonDeveloperCloud"),
+          .product(name: "LanguageTranslatorV3", package: "WatsonDeveloperCloud"),
+          .product(name: "NaturalLanguageClassifierV1", package: "WatsonDeveloperCloud"),
+          .product(name: "NaturalLanguageUnderstandingV1", package: "WatsonDeveloperCloud"),
+          .product(name: "PersonalityInsightsV3", package: "WatsonDeveloperCloud"),
+          .product(name: "ToneAnalyzerV3", package: "WatsonDeveloperCloud"),
+          .product(name: "VisualRecognitionV3", package: "WatsonDeveloperCloud")
+          ],
+        path: "."
       )
     ]
 )
