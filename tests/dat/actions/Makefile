@@ -23,7 +23,7 @@ endef
 
 define BuildWithLib5
 	cd $(1); \
-	sed -i.bak 's/4.0/5.4/' Package.swift; \
+	sed -i.bak 's/4.0/5.3/' Package.swift; \
 	zip - -r Package.swift Sources/main.swift | docker run -i $(OW_COMPILER_5) -compile main >$(OUT_5)/$(1).zip; \
 	mv Package.swift.bak Package.swift
 endef
