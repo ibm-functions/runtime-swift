@@ -40,7 +40,7 @@ RUN export DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true && ap
     libpython2.7 \
     libicu-dev \
     libssl-dev \
-    libxml2 \
+#    libxml2 \
     tzdata \
     git \
     libcurl4-openssl-dev \
@@ -54,6 +54,8 @@ RUN export DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true && ap
     && locale-gen en_US.UTF-8 \
     # Cleanup package lists, not required anymore.
     && rm -r /var/lib/apt/lists/*
+
+RUN apt remove libxml2 -y
 
 # Set swift variables and environment.
 ARG SWIFT_PLATFORM=ubuntu18.04
