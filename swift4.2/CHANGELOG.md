@@ -1,5 +1,15 @@
 # IBM Functions Swift 4.2 Runtime
 
+# 1.4.4
+Changes:
+  - Update GO_PROXY_RELEASE_VERSION to 1.15@1.18.0.
+  - Update to new parent image to get latest go security fixes.
+
+Swift runtime version: [swift-4.2.4-RELEASE](https://swift.org/builds/swift-4.2.4-release/ubuntu1804/swift-4.2.4-RELEASE/swift-4.2.4-RELEASE-ubuntu18.04.tar.gz)
+
+Packages included:
+  - [Watson SDK 1.3.1](https://github.com/watson-developer-cloud/swift-sdk/releases/tag/1.3.1)
+
 ## 1.4.3
 Changes:
   - Update to ubuntu 18.04 to continue to receive security fixes.
