@@ -1,5 +1,9 @@
 # IBM Functions Swift 4.2 Runtime
 
+# 1.4.5
+Changes:
+  - update openwhisk parent image tag to 60fb30c
+
 # 1.4.4
 Changes:
   - Update GO_PROXY_RELEASE_VERSION to 1.15@1.18.0.

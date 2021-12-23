@@ -1,5 +1,5 @@
 # Extend Apache OpenWhisk Swift v4.2 image: https://github.com/apache/openwhisk-runtime-swift/blob/master/core/swift42Action/Dockerfile
-FROM openwhisk/action-swift-v4.2:43eef06 AS parent_image
+FROM openwhisk/action-swift-v4.2:60fb30c AS parent_image
 
 
 # from https://github.com/apache/openwhisk-runtime-swift/blob/master/core/swift42Action/Dockerfile
