@@ -30,11 +30,6 @@ docker tag openwhisk/nodejs6action:nightly nodejs6action
 
 TERM=dumb ./gradlew install
 
-# install new version docker
-curl -fsSL https://get.docker.com -o get-docker.sh
-sudo sh get-docker.sh
-docker version
-
 # Build runtime
 cd $ROOTDIR
 TERM=dumb ./gradlew \
