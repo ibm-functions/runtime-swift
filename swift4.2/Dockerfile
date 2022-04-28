@@ -4,7 +4,7 @@ FROM openwhisk/action-swift-v4.2:43eef06 AS parent_image
 
 # from https://github.com/apache/openwhisk-runtime-swift/blob/master/core/swift42Action/Dockerfile
 # Build go action-loop proxy from source.
-FROM golang:1.15 AS builder_source
+FROM golang:1.18 AS builder_source
 ARG GO_PROXY_GITHUB_USER=apache
 ARG GO_PROXY_GITHUB_BRANCH=master
 RUN git clone --branch ${GO_PROXY_GITHUB_BRANCH} \
@@ -13,7 +13,7 @@ RUN git clone --branch ${GO_PROXY_GITHUB_BRANCH} \
    mv proxy /bin/proxy
 
 # Build go action-loop proxy from release.
-FROM golang:1.15 AS builder_release
+FROM golang:1.18 AS builder_release
 ARG GO_PROXY_RELEASE_VERSION=1.15@1.18.0
 RUN curl -sL \
   https://github.com/apache/openwhisk-runtime-go/archive/{$GO_PROXY_RELEASE_VERSION}.tar.gz\
