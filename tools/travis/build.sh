@@ -21,10 +21,10 @@ fi
 cd $WHISKDIR
 
 #pull down images
-docker pull openwhisk/controller:ecb2a98
-docker tag openwhisk/controller:ecb2a98 ${IMAGE_PREFIX}/controller
-docker pull openwhisk/invoker:ecb2a98
-docker tag openwhisk/invoker:ecb2a98 ${IMAGE_PREFIX}/invoker
+docker pull ibmfunctions/controller:nightly
+docker tag ibmfunctions/controller:nightly ${IMAGE_PREFIX}/controller
+docker pull ibmfunctions/invoker:nightly
+docker tag ibmfunctions/invoker:nightly ${IMAGE_PREFIX}/invoker
 docker pull openwhisk/nodejs6action:nightly
 docker tag openwhisk/nodejs6action:nightly nodejs6action
 
