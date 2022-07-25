@@ -11,11 +11,11 @@ HOMEDIR="$SCRIPTDIR/../../../"
 cd $HOMEDIR
 # git clone --depth=1 https://github.com/apache/incubator-openwhisk.git openwhisk
 
-git clone https://github.com/apache/openwhisk.git openwhisk
+git clone  https://github.com/ibm-functions/openwhisk.git openwhisk
 cd openwhisk
 # Use a fixed commit to run the tests, to explicitly control when changes are consumed.
 # Commit:  Update the notice year (#5122)
-git checkout ecb2a980659f28d0adbd9ef837afaf4cb2b695bf
+git checkout 7ae02b8ede4f4b4068b3b95dbc3f02f902d936c9
 
 # Work around for the missing azure-storage-blob:12.6.0 issue.
 # Version 12.6.0 was removed from maven central. Patching the code to use 12.7.0 instead.
