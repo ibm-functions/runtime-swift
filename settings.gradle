@@ -18,3 +18,6 @@ gradle.ext.scalafmt = [
     version: '1.5.0',
     config: new File(rootProject.projectDir, '.scalafmt.conf')
 ]
+
+gradle.ext.akka = [version : '2.5.32']
+gradle.ext.akka_http = [version : '10.2.7']
