@@ -65,7 +65,9 @@ ENV SWIFT_PLATFORM=$SWIFT_PLATFORM \
     SWIFT_VERSION=$SWIFT_VERSION
 
 # Download GPG keys, signature and Swift package, then unpack, cleanup and execute permissions for foundation libs.
-RUN SWIFT_URL=https://swift.org/builds/$SWIFT_BRANCH/$(echo "$SWIFT_PLATFORM" | tr -d .)/$SWIFT_VERSION/$SWIFT_VERSION-$SWIFT_PLATFORM.tar.gz \
+# https://download.swift.org/swift-4.2.4-release/ubuntu1804/swift-4.2.4-RELEASE/swift-4.2.4-RELEASE-ubuntu18.04.tar.gz
+RUN set -x \
+    && SWIFT_URL=https://download.swift.org/$SWIFT_BRANCH/$(echo "$SWIFT_PLATFORM" | tr -d .)/$SWIFT_VERSION/$SWIFT_VERSION-$SWIFT_PLATFORM.tar.gz \
     && curl -fSsL $SWIFT_URL -o swift.tar.gz \
     && curl -fSsL $SWIFT_URL.sig -o swift.tar.gz.sig \
     && export GNUPGHOME="$(mktemp -d)" \
@@ -89,7 +91,7 @@ RUN SWIFT_URL=https://swift.org/builds/$SWIFT_BRANCH/$(echo "$SWIFT_PLATFORM" | 
         done \
     && gpg --batch --verify --quiet swift.tar.gz.sig swift.tar.gz \
     && tar -xzf swift.tar.gz --directory / --strip-components=1 \
-    && rm -r "$GNUPGHOME" swift.tar.gz.sig swift.tar.gz \
+    && rm -r "$GNUPGHOME" swift.tar.gz.sig swift.tar.gz || true \
     && chmod -R o+r /usr/lib/swift \
     # Print Installed Swift Version
     && swift --version
