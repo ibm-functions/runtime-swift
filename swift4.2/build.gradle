@@ -1,6 +1,11 @@
 ext.dockerImageName = 'action-swift-v4.2'
 apply from: '../gradle/docker.gradle'
 
+// To always get the latest vulnerability updates into the image, use --no-cache for building the image.
+// This is not needed for travis builds (the VM is always new), but for local development.
+dockerBuildArg = ['build','--no-cache']
+
+
 distDocker.dependsOn 'copyWhisk'
 distDocker.finalizedBy('cleanup')
 
