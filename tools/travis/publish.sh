@@ -26,7 +26,7 @@ fi
 
 if [[ ! -z ${RUNTIME} ]]; then
 TERM=dumb ./gradlew \
-:${RUNTIME}:distDocker \
+:${RUNTIME}:pushImage \
 -PdockerRegistry=docker.io \
 -PdockerImagePrefix=${IMAGE_PREFIX} \
 -PdockerImageTag=${IMAGE_TAG}
@@ -35,7 +35,7 @@ TERM=dumb ./gradlew \
   if [ ${IMAGE_TAG} == "master" ]; then
   SHORT_COMMIT=`git rev-parse --short HEAD`
   TERM=dumb ./gradlew \
-  :${RUNTIME}:distDocker \
+  :${RUNTIME}:pushImage \
   -PdockerRegistry=docker.io \
   -PdockerImagePrefix=${IMAGE_PREFIX} \
   -PdockerImageTag=${SHORT_COMMIT}
