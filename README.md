@@ -1,7 +1,5 @@
 # IBM Cloud Functions runtime for swift
 
-[![Build Status](https://travis-ci.org/ibm-functions/runtime-swift.svg?branch=master)](https://travis-ci.org/ibm-functions/runtime-swift)
-
 ## Changelogs
 - [Swift 4.2   CHANGELOG.md](swift4.2/CHANGELOG.md)
 - [Swift 4.1   CHANGELOG.md](swift4.1/CHANGELOG.md)
@@ -313,7 +311,7 @@ The `$user_prefix` is usually your dockerhub user id.
 - Check if there is a new dockerhub image from upstream [openwhisk/action-swift-v4.1](https://hub.docker.com/r/openwhisk/action-swift-v4.1/tags)
   - If there is a new tag update the [swift4.1/Dockerfile](./swift4.1/Dockerfile)
 ### Pushing new versions for runtimes
-- After the PR is merged and the master pass Travis CI, checkout master.
+- After the PR is merged and the master pass the build, checkout master.
 - Create tag for each runtime and push upstream
 ```
 git tag 4.2@<new version>
